@@ -1,0 +1,95 @@
+import { Link } from "react-router-dom";
+import signup from "../../../assets/signup.png";
+import { FcGoogle } from "react-icons/fc";
+import { FaFacebook } from "react-icons/fa";
+import { useEffect } from "react";
+
+const SignUp = () => {
+
+  useEffect(() => {
+    // Scroll to the top of the page when the component mounts
+    window.scrollTo(0, 0);
+  }, []);
+  
+  return (
+    <div className="bg-gray-100">
+      <div className="min-h-screen container mx-auto px-6 flex items-center justify-center">
+        <div className="w-1/2 hidden md:block">
+          <img src={signup} alt="" />
+        </div>
+        <div className="w-full md:w-1/2 rounded px-8 pt-6 pb-8 mb-4">
+          <h1 className="text-center text-3xl mb-6 py-8">
+            Sign up for an account
+          </h1>
+          <div className="flex flex-col md:flex-row items-center justify-center gap-3">
+            <button className="text-sm border py-2 px-4 rounded w-full md:w-1/2 flex items-center justify-center gap-2 hover:bg-slate-200">
+              <FcGoogle size="1.5rem" />
+              Sign Up with Google
+            </button>
+            <button className="text-sm border py-2 px-4 rounded w-full md:w-1/2 flex items-center justify-center gap-2 hover:bg-slate-200">
+              <FaFacebook size="1.5rem" color="#0866FF" />
+              Sign Up with Facebook
+            </button>
+          </div>
+          {/* divider */}
+          <div className="flex items-center justify-between py-8">
+            <div className="w-auto md:w-1/3 h-[1.5px] bg-slate-300"></div>
+            <p className="text-slate-400">or with email</p>
+            <div className="w-auto md:w-1/3 h-[1.5px] bg-slate-300"></div>
+          </div>
+
+          {/* form */}
+          <form className="mb-4">
+            <div className="mb-5">
+              <input
+                className="bg-transparent appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none"
+                id="username"
+                type="text"
+                placeholder="Username"
+              />
+            </div>
+            <div className="mb-5">
+              <input
+                className="bg-transparent appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none"
+                id="email"
+                type="email"
+                placeholder="Email"
+              />
+            </div>
+            <div className="mb-5">
+              <input
+                className="bg-transparent appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none"
+                id="password"
+                type="password"
+                placeholder="Password"
+              />
+            </div>
+            <div className="mb-5">
+              <input
+                className="bg-transparent appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none"
+                id="confirmPassword"
+                type="password"
+                placeholder="Confirm Password"
+              />
+            </div>
+            <div className="flex flex-col items-center justify-between">
+              <button
+                className="bg-slate-600 hover:bg-slate-700 w-full text-white font-bold py-2 px-4 rounded my-4 focus:outline-none focus:shadow-outline"
+                type="submit"
+              >
+                Sign Up
+              </button>
+              <span
+                className="inline-block align-baseline text-sm"
+              >
+                Already have an account? <Link className="text-blue-400 font-bold" to='/login'>Log In</Link>
+              </span>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SignUp;
