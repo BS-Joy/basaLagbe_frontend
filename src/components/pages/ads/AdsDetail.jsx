@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useGetAdsQuery } from "../../../feature/ads/adsSlice";
 import LoadingAnimation from "../../LoadingAnimation";
 import { BsBuildingUp } from "react-icons/bs";
@@ -17,6 +17,8 @@ import { MdOutlineContactPhone } from "react-icons/md";
 import { MdOutlinePhoneIphone } from "react-icons/md";
 import { IoLogoWhatsapp } from "react-icons/io";
 import { useEffect } from "react";
+import { getCurrentUser } from "../../../feature/user/userSlice";
+import { useSelector } from "react-redux";
 
 const AdsDetail = () => {
   const { id: adId } = useParams();
@@ -25,6 +27,9 @@ const AdsDetail = () => {
       return { ad: data?.entities[adId], isLoading };
     },
   });
+
+  const user = useSelector(getCurrentUser);
+  console.log(user);
 
   useEffect(() => {
     // Scroll to the top of the page when the component mounts
@@ -39,7 +44,7 @@ const AdsDetail = () => {
 
   return (
     <div className="container mx-auto px-6 py-8">
-      <button className="fixed bottom-4 right-4 bg-[rgb(60,80,107)] p-4 rounded-full block md:hidden">
+      <button className="fixed bottom-4 right-4 bg-[rgb(60,80,107)] border p-3 rounded-full block md:hidden">
         <BsBookmarkPlus size={"1rem"} color="white" />
       </button>
       {/*<!-- Component: Horizontal card--> */}
@@ -65,15 +70,15 @@ const AdsDetail = () => {
                   Detail Informations
                 </span>
               </div>
-              <button className="hidden md:block">
-                <BsBookmarkPlus size={"1.5rem"} />
+              <button className="hidden md:block bg-[#33445B] hover:bg-[rgb(61,82,109)] p-2 rounded">
+                <BsBookmarkPlus size={"1rem"} color="white" />
               </button>
             </div>
             <hr />
 
             <div className="px-4 md:px-8">
               {/* title */}
-              <div className="border-b-2 pb-2 flex justify-between h-full gap-4">
+              <div className="border-b-2 flex justify-between h-full gap-4">
                 <h3 className="text-xl font-medium text-slate-700 py-4">
                   {ad.title}
                 </h3>
@@ -110,24 +115,27 @@ const AdsDetail = () => {
 
                 {/* contact informations */}
                 <div className="pt-2 md:w-1/2 flex flex-col md:items-center gap-2 border-t-2 md:border-none">
-                  <h1 className="text-sm md:text-md font-semibold text-black flex items-center gap-2">
+                  <h1 className="text-sm md:text-md font-bold text-black flex items-center gap-2">
                     <MdOutlineContactPhone />
                     Contact Informations
                   </h1>
 
-                  <div className="flex flex-col gap-2 justify-between text-black">
-                    <p className="flex items-center gap-1">
-                      <MdOutlinePhoneIphone />: &nbsp;
-                      {ad.contact.phone}
-                    </p>
-                    <p className="flex items-center gap-1">
-                      <IoLogoWhatsapp color="green" />: &nbsp;
-                      {ad.contact.whatsapp}
-                    </p>
-                  </div>
+                  {user?._id ? (
+                    <div className="flex flex-col gap-2 justify-between text-black">
+                      <p className="flex items-center gap-1">
+                        <MdOutlinePhoneIphone />: &nbsp;
+                        {ad.contact.phone}
+                      </p>
+                      <p className="flex items-center gap-1">
+                        <IoLogoWhatsapp color="green" />: &nbsp;
+                        {ad.contact.whatsapp}
+                      </p>
+                    </div>
+                  ) : (
+                    <p className="text-black">Please <Link to="/login" className="text-blue-500 underline"> Log in</Link> to see contact informations</p>
+                  )}
                 </div>
               </div>
-
             </div>
           </header>
 

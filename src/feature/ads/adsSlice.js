@@ -1,53 +1,37 @@
-import { createEntityAdapter, createSelector } from "@reduxjs/toolkit";
 import { apiSlice } from "../api/apiSlice";
 
-const adsAdapter = createEntityAdapter({
-    sortComparer: (a, b) => b.rent - a.rent,
-    selectId: ad => ad._id
-});
-
-export const initialState = adsAdapter.getInitialState();
-
 export const extendedApiSlice = apiSlice.injectEndpoints({
-    endpoints: builder => ({
-        getAds: builder.query({
-            query: () => '/ads',
-            transformResponse: response => {
-                return adsAdapter.setAll(initialState, response);
-            },
-            transformErrorResponse: response => {
-                return response;
-            },
-            // eslint-disable-next-line no-unused-vars
-            providesTags: (result) => [
-                { type: 'ads', id: "LIST" },
-                ...result.ids.map(id => ({ type: 'ads', id }))
+  endpoints: (builder) => ({
+    getAds: builder.query({
+      query: () => "/ads",
+      providesTags: (result) =>
+        result?.length
+          ? [
+              { type: "ads", id: "LIST" },
+              ...result?.map((ad) => ({ type: "ads", id: ad?._id })),
             ]
-        }),
-        postAds: builder.mutation({
-            query: newAd => ({
-                url: '/ads',
-                method: 'POST',
-                body: newAd
-            }),
-            invalidatesTags: [{type: 'ads', id: "LIST"}],
-        })
-    })
+          : [{ type: "ads", id: "LIST" }],
+    }),
+    postAds: builder.mutation({
+      query: (newAd) => ({
+        url: "/ads",
+        method: "POST",
+        body: newAd,
+      }),
+      invalidatesTags: [{ type: "ads", id: "LIST" }],
+    }),
+    getAdsByAuthor: builder.query({
+      query: (authorId) => `/ads/author/${authorId}`,
+      providesTags: (result) =>
+        result?.length
+          ? [
+              { type: "ads", id: "AUTHOR" },
+              ...result?.map((ad) => ({ type: "ads", id: ad?._id })),
+            ]
+          : [{ type: "ads", id: "AUTHOR" }],
+    }),
+  }),
 });
 
-export const {usePostAdsMutation, useGetAdsQuery} = extendedApiSlice;
-
-const selectAdsResult = extendedApiSlice.endpoints.getAds.select();
-
-const selectAdsData = createSelector(
-    selectAdsResult, (adsResult) => {
-        return adsResult.data;
-    }
-)
-
-
-export const {
-    selectAll: selectAllAds,
-    selectIds: selectAdsIds,
-    selectById: selectAdsById
-} = adsAdapter.getSelectors(state => selectAdsData(state) ?? initialState)
+export const { usePostAdsMutation, useGetAdsQuery, useGetAdsByAuthorQuery } =
+  extendedApiSlice;

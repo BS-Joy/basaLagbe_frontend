@@ -4,10 +4,9 @@ import { TbBed } from "react-icons/tb";
 import { PiBathtub } from "react-icons/pi";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { selectAdsById } from "../../../feature/ads/adsSlice";
 
-export default function AdsCard({adId}) {
-  const ad = useSelector(state => selectAdsById(state, adId));
+export default function AdsCard({ ad }) {
+  // const ad = useSelector(state => selectAdsById(state, adId));
   return (
     <>
       {/*<!-- Component: Horizontal card--> */}
@@ -23,33 +22,53 @@ export default function AdsCard({adId}) {
         {/*  <!-- Body--> */}
         <div className="flex-1 p-6 sm:mx-6 sm:px-0">
           <header className="flex justify-center h-full flex-col gap-4 mb-4">
-              <h2 className="text-2xl font-medium text-slate-700">
-                {ad.title}
-              </h2>
-              <p className="text-sm text-green-700"> Posted on: {new Date(ad.createdAt).toDateString()}</p>
-              <p className="text-sm text-violet-600"> Category: {ad.category}</p>
+            <h2 className="text-2xl font-medium text-slate-700">{ad.title}</h2>
+            <p className="text-sm text-green-700">
+              {" "}
+              Posted on: {new Date(ad.createdAt).toDateString()}
+            </p>
+            <p className="text-sm text-violet-600"> Category: {ad.category}</p>
 
-              {/* location */}
-              <p className="text-lg flex items-center"> <span className="bg-[rgb(51,68,91)] p-1 rounded-full">
-                <IoLocationOutline size='18px' color="white" />
-              </span>&nbsp;: {ad.location.area}, {ad.location.district}</p>
+            {/* location */}
+            <p className="text-lg flex items-center">
+              {" "}
+              <span className="bg-[rgb(51,68,91)] p-1 rounded-full">
+                <IoLocationOutline size="18px" color="white" />
+              </span>
+              &nbsp;: {ad.location.area}, {ad.location.district}
+            </p>
 
-              {/* rent */}
-              <p className="text-lg flex items-center"><span className="bg-[rgb(51,68,91)] px-[10px] rounded-full text-white">
+            {/* rent */}
+            <p className="text-lg flex items-center">
+              <span className="bg-[rgb(51,68,91)] px-[10px] rounded-full text-white">
                 ৳
-              </span>&nbsp;: {ad.rent}/month</p>
+              </span>
+              &nbsp;: {ad.rent}/month
+            </p>
 
-              {/* bed room */}
-              <p className="text-lg flex items-center"> <span className="bg-[rgb(51,68,91)] p-1 rounded-full">
-                <TbBed size='18px' color="white" />
-              </span>&nbsp;Bedrooms : {ad.bedroom}</p>
+            {/* bed room */}
+            <p className="text-lg flex items-center">
+              {" "}
+              <span className="bg-[rgb(51,68,91)] p-1 rounded-full">
+                <TbBed size="18px" color="white" />
+              </span>
+              &nbsp;Bedrooms : {ad.bedroom}
+            </p>
 
-              {/* bathroom */}
-              <p className="text-lg flex items-center"><span className="bg-[rgb(51,68,91)] p-1 rounded-full text-white">
-                <PiBathtub size='18px' color="white" />
-              </span>&nbsp;Bathrooms: {ad.bathroom}</p>
-              <hr />
-              <Link to={`/details/${ad._id}`} className="py-2 rounded bg-[rgb(51,68,91)] text-white text-center">See Details</Link>
+            {/* bathroom */}
+            <p className="text-lg flex items-center">
+              <span className="bg-[rgb(51,68,91)] p-1 rounded-full text-white">
+                <PiBathtub size="18px" color="white" />
+              </span>
+              &nbsp;Bathrooms: {ad.bathroom}
+            </p>
+            <hr />
+            <Link
+              to={`/details/${ad._id}`}
+              className="py-2 rounded bg-[rgb(51,68,91)] hover:bg-[rgb(61,82,109)] text-white text-center"
+            >
+              See Details
+            </Link>
           </header>
         </div>
       </div>

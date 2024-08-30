@@ -3,6 +3,8 @@ import { usePostAdsMutation } from "../../../feature/ads/adsSlice";
 import { getMonth, bdDistricts, bdAreas } from "../../../utils/postAdsUtils";
 import { initialState, postAdsReducer } from "../../../reducers/postAdsReducer";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { getCurrentUser } from "../../../feature/user/userSlice";
 
 
 const PostAds = () => {
@@ -15,6 +17,8 @@ const PostAds = () => {
   const [postAds] = usePostAdsMutation();
 
   const upCommingMonths = getMonth();
+
+  const user = useSelector(getCurrentUser)
 
   const getTitle = e => {
       dispatch({type: 'addTitle', payload: e.target.value})
@@ -51,6 +55,7 @@ const PostAds = () => {
     e.preventDefault();
 
     const data = {
+      authorId: user?._id,
       title: state.title,
       description: state.description,
       division: state.division,

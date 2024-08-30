@@ -2,16 +2,21 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { IoBookmarksOutline } from "react-icons/io5";
 import { FaRegUserCircle } from "react-icons/fa";
-import { FaChevronDown, FaChevronLeft } from "react-icons/fa6";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa6";
+import { AnimatePresence, easeInOut, motion } from "framer-motion";
+import { useDispatch, useSelector } from "react-redux";
+import { getCurrentUser, logOut } from "../../feature/user/userSlice";
 
 export default function Navbar() {
   const [isToggleOpen, setIsToggleOpen] = useState(false);
   const [showDropDown, setShowDropDOwn] = useState(false);
   const dropDownRef = useRef(null);
+  const dispatch = useDispatch();
+  const user = useSelector(getCurrentUser);
 
   useEffect(() => {
     const handleOutsideClick = (e) => {
-      if (dropDownRef && !dropDownRef.current.contains(e.target)) {
+      if (dropDownRef && !dropDownRef?.current?.contains(e.target)) {
         setShowDropDOwn(false);
       }
     };
@@ -132,7 +137,7 @@ export default function Navbar() {
       </div>
 
       {/*<!-- Header --> */}
-      <header className="sticky top-[-1px] z-20 w-full text-white bg-[rgb(60,80,107)] shadow-lg shadow-slate-700/5 after:absolute after:top-full after:left-0 after:z-10 after:block after:h-px after:w-full lg:backdrop-blur-sm lg:after:hidden">
+      <header className="sticky top-[-1px] z-20 w-full text-white bg-[#33445B] shadow-lg shadow-slate-700/5 after:absolute after:top-full after:left-0 after:z-10 after:block after:h-px after:w-full lg:backdrop-blur-sm lg:after:hidden">
         <div className="relative mx-auto max-w-full px-6 lg:max-w-5xl xl:max-w-7xl 2xl:max-w-[96rem]">
           <nav
             aria-label="main navigation"
@@ -297,73 +302,103 @@ export default function Navbar() {
 
             {/*      <!-- Actions --> */}
             <div className="ml-auto flex items-center justify-end px-6 lg:ml-0 lg:flex-1 lg:p-0">
-              <Link
-                to="/postAds"
-                role="menuitem"
-                aria-haspopup="false"
-                className="lg:flex items-center gap-2 py-4 transition-colors duration-300 hover:text-slate-400 focus:text-slate-300 focus:outline-none focus-visible:outline-none lg:px-2 hidden"
-              >
-                <span>Post New Ads</span>
-              </Link>
-
-              {/* log in */}
-              <Link
-                to="/login"
-                role="menuitem"
-                aria-haspopup="false"
-                className="lg:flex items-center gap-2 py-4 transition-colors duration-300 hover:text-slate-400 focus:text-slate-300 focus:outline-none focus-visible:outline-none lg:px-2 hidden"
-              >
-                <span>Log In</span>
-              </Link>
-
-              {/* sign up */}
-              <Link
-                to="/signup"
-                role="menuitem"
-                aria-haspopup="false"
-                className="lg:flex items-center gap-2 py-4 transition-colors duration-300 hover:text-slate-400 focus:text-slate-300 focus:outline-none focus-visible:outline-none lg:px-2 hidden"
-              >
-                <span>Sign Up</span>
-              </Link>
-
-              {/* bookmark icon */}
-              <div className="relative inline-flex h-10 w-10 items-center justify-center rounded-full text-lg text-white">
-                <IoBookmarksOutline size={"1.5rem"} />
-                <span className="absolute -top-1.5 -right-1.5 inline-flex items-center justify-center gap-1 rounded-full border-2 border-white bg-pink-500 px-1.5 text-sm text-white">
-                  0<span className="sr-only"> new emails </span>
-                </span>
-              </div>
-
-              {/* user icon */}
-              <button
-                ref={dropDownRef}
-                onClick={onClickDropDown}
-                role="menuitem"
-                aria-haspopup="false"
-                className="lg:flex relative items-center gap-2 py-4 transition-colors duration-300 lg:pl-4 hidden"
-              >
-                <span>
-                  <FaRegUserCircle size={"1.5rem"} />
-                </span>
-                <span>
-                  {showDropDown ? <FaChevronLeft /> : <FaChevronDown />}
-                </span>
-                <div
-                  className={`absolute text-black top-full bg-[rgb(240,248,255)] ${
-                    showDropDown ? "flex" : "hidden"
-                  } flex-col end-0 w-40 shadow-md shadow-gray-300 rounded items-center overflow-hidden`}
-                >
+              {/* post new ads button */}
+              {user?._id && (
+                <>
                   <Link
-                    to={"/profile"}
-                    className="py-3 w-full border-b-2 hover:text-white hover:bg-[rgb(60,80,107)]"
+                    to="/postAds"
+                    role="menuitem"
+                    aria-haspopup="false"
+                    className="lg:flex items-center gap-2 py-4 transition-colors duration-300 hover:text-slate-400 focus:text-slate-300 focus:outline-none focus-visible:outline-none lg:px-2 hidden"
                   >
-                    Profile
+                    <span>Post New Ads</span>
                   </Link>
-                  <Link className="py-3 w-full hover:text-white hover:bg-[rgb(60,80,107)]">
-                    Log Out
+                  
+                  {/* bookmark icon */}
+                  <div className="relative inline-flex h-10 w-10 items-center justify-center rounded-full text-lg text-white">
+                    <IoBookmarksOutline size={"1.5rem"} />
+                    <span className="absolute -top-1.5 -right-1.5 inline-flex items-center justify-center gap-1 rounded-full border-2 border-white bg-pink-500 px-1.5 text-sm text-white">
+                      0<span className="sr-only"> new emails </span>
+                    </span>
+                  </div>
+
+                  {/* user icon */}
+                  <button
+                    ref={dropDownRef}
+                    role="menuitem"
+                    aria-haspopup="false"
+                    className="lg:flex relative items-center gap-2 py-4 transition-colors duration-300 lg:pl-4 hidden"
+                  >
+                    <span>
+                      <FaRegUserCircle size={"1.5rem"} />
+                    </span>
+                    <span onClick={onClickDropDown}>
+                      {showDropDown ? <FaChevronUp /> : <FaChevronDown />}
+                    </span>
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={showDropDown}
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ duration: 0.1 }}
+                        exit={{
+                          scale: 0,
+                          transition: {
+                            ease: easeInOut,
+                            duration: 0.1,
+                          },
+                        }}
+                        className={`absolute text-black top-full right-3 bg-[rgb(240,248,255)] ${
+                          showDropDown ? "flex" : "hidden"
+                        } flex-col end-0 w-40 shadow-md shadow-gray-300 rounded items-center overflow-hidden`}
+                      >
+                        <Link
+                          to={"/profile"}
+                          onClick={() => setShowDropDOwn(false)}
+                          className="py-3 w-full border-b-2 hover:text-white hover:bg-[rgb(60,80,107)]"
+                        >
+                          Profile
+                        </Link>
+                        <div
+                          onClick={() => {
+                            dispatch(logOut());
+                            setShowDropDOwn(false);
+                          }}
+                          className="py-3 w-full hover:text-white hover:bg-[rgb(60,80,107)]"
+                        >
+                          Log Out
+                        </div>
+                      </motion.div>
+                    </AnimatePresence>
+                  </button>
+                </>
+              )}
+
+              {!user?._id ? (
+                <>
+                  {/* log in */}
+                  <Link
+                    to="/login"
+                    role="menuitem"
+                    aria-haspopup="false"
+                    className="lg:flex items-center gap-2 py-4 transition-colors duration-300 hover:text-slate-400 focus:text-slate-300 focus:outline-none focus-visible:outline-none lg:px-2 hidden"
+                  >
+                    <span>Log In</span>
                   </Link>
-                </div>
-              </button>
+
+                  {/* sign up */}
+                  <Link
+                    to="/signup"
+                    role="menuitem"
+                    aria-haspopup="false"
+                    className="lg:flex items-center gap-2 py-4 transition-colors duration-300 hover:text-slate-400 focus:text-slate-300 focus:outline-none focus-visible:outline-none lg:px-2 hidden"
+                  >
+                    <span>Sign Up</span>
+                  </Link>
+                </>
+              ) : (
+                ""
+              )}
             </div>
           </nav>
         </div>

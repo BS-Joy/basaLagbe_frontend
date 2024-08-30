@@ -1,13 +1,12 @@
 import { useEffect } from "react";
 import Glide from "@glidejs/glide";
 import AdsCard from "../ads/AdsCard";
-import { selectAllAds, useGetAdsQuery } from "../../../feature/ads/adsSlice";
-import { useSelector } from "react-redux";
+import { useGetAdsQuery } from "../../../feature/ads/adsSlice";
 import LoadingAnimation from "../../LoadingAnimation";
+import EmptyMessage from "../../global/EmptyMessage";
 
 const RecentAdsCarousel = () => {
-  const { isSuccess, isError, isLoading, error,  } = useGetAdsQuery();
-  const ads = useSelector(selectAllAds);
+  const { data: ads, isSuccess, isError, isLoading, error } = useGetAdsQuery();
 
   useEffect(() => {
     const slider = new Glide(".glide-04", {
@@ -35,14 +34,19 @@ const RecentAdsCarousel = () => {
     recent = <LoadingAnimation />;
   } else if (isError) {
     recent = <p>{error}</p>;
-  } else if(isSuccess) {
-    recent = ads.map((ad) => {
-      return (
-        <li key={ad._id} className="border rounded-md">
-          <AdsCard adId={ad._id} />
-        </li>
+  } else if (isSuccess) {
+    recent =
+      ads?.length > 0 ? (
+        ads?.map((ad) => {
+          return (
+            <li key={ad._id} className="border rounded-md">
+              <AdsCard ad={ad} />
+            </li>
+          );
+        })
+      ) : (
+        <EmptyMessage message="No blogs available to show" />
       );
-    });
   }
 
   return (
@@ -56,53 +60,57 @@ const RecentAdsCarousel = () => {
           </ul>
         </div>
         {/*    <!-- Controls --> */}
-        <div
-          className="flex items-center justify-center w-full gap-2 p-4"
-          data-glide-el="controls"
-        >
-          <button
-            className="inline-flex items-center justify-center w-8 h-8 transition duration-300 border rounded-full border-slate-700 bg-white/20 text-slate-700 hover:border-slate-900 hover:text-slate-900 focus-visible:outline-none lg:h-12 lg:w-12"
-            data-glide-dir="<"
-            aria-label="prev slide"
+        {ads?.length > 1 ? (
+          <div
+            className="flex items-center justify-center w-full gap-2 p-4"
+            data-glide-el="controls"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              className="w-5 h-5"
+            <button
+              className="inline-flex items-center justify-center w-8 h-8 transition duration-300 border rounded-full border-slate-700 bg-white/20 text-slate-700 hover:border-slate-900 hover:text-slate-900 focus-visible:outline-none lg:h-12 lg:w-12"
+              data-glide-dir="<"
+              aria-label="prev slide"
             >
-              <title>prev slide</title>
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
-              />
-            </svg>
-          </button>
-          <button
-            className="inline-flex items-center justify-center w-8 h-8 transition duration-300 border rounded-full border-slate-700 bg-white/20 text-slate-700 hover:border-slate-900 hover:text-slate-900 focus-visible:outline-none lg:h-12 lg:w-12"
-            data-glide-dir=">"
-            aria-label="next slide"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              className="w-5 h-5"
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="w-5 h-5"
+              >
+                <title>prev slide</title>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
+                />
+              </svg>
+            </button>
+            <button
+              className="inline-flex items-center justify-center w-8 h-8 transition duration-300 border rounded-full border-slate-700 bg-white/20 text-slate-700 hover:border-slate-900 hover:text-slate-900 focus-visible:outline-none lg:h-12 lg:w-12"
+              data-glide-dir=">"
+              aria-label="next slide"
             >
-              <title>next slide</title>
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
-              />
-            </svg>
-          </button>
-        </div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="w-5 h-5"
+              >
+                <title>next slide</title>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+                />
+              </svg>
+            </button>
+          </div>
+        ) : (
+          ""
+        )}
       </div>
       {/*<!-- End Slider with controls outside --> */}
     </>

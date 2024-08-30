@@ -8,6 +8,8 @@ import LogIn from "./components/pages/user/LogIn"
 import PostAds from "./components/pages/ads/PostAds"
 import AdsDetail from "./components/pages/ads/AdsDetail"
 import Profile from "./components/pages/user/Profile"
+import PublicRoute from "./components/routes/PublicRoute"
+import PrivateRoute from "./components/routes/PrivateRoute"
 
 function App() {
   const router = createBrowserRouter([
@@ -21,11 +23,11 @@ function App() {
         },
         {
           path: '/signup',
-          element: <SignUp />
+          element: <PublicRoute><SignUp /></PublicRoute>
         },
         {
           path: '/login',
-          element: <LogIn />
+          element: <PublicRoute><LogIn /></PublicRoute>
         },
         {
           path: '/ads',
@@ -37,7 +39,7 @@ function App() {
         },
         {
           path: '/postAds',
-          element: <PostAds/>
+          element: <PrivateRoute><PostAds/></PrivateRoute>
         },
         {
           path: '/contact',
@@ -45,7 +47,7 @@ function App() {
         },
         {
           path: '/profile',
-          element: <Profile/>
+          element: <PrivateRoute><Profile/></PrivateRoute>
         },
       ]
     }
