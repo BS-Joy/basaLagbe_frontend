@@ -6,50 +6,49 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getCurrentUser } from "../../../feature/user/userSlice";
 
-
 const PostAds = () => {
   const [state, dispatch] = useReducer(postAdsReducer, initialState);
   const [districtLists, setDistrictLists] = useState([]);
   const [areaLists, setAreaLists] = useState([]);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [postAds] = usePostAdsMutation();
 
   const upCommingMonths = getMonth();
 
-  const user = useSelector(getCurrentUser)
+  const user = useSelector(getCurrentUser);
 
-  const getTitle = e => {
-      dispatch({type: 'addTitle', payload: e.target.value})
-  }
+  const getTitle = (e) => {
+    dispatch({ type: "addTitle", payload: e.target.value });
+  };
 
-  const getDesc = e => {
-    dispatch({type: 'addDescription', payload: e.target.value})
-  }
+  const getDesc = (e) => {
+    dispatch({ type: "addDescription", payload: e.target.value });
+  };
 
   const districtHandle = (e) => {
     const div = e.target.value;
-    dispatch({type: 'addDivision', payload: div})
-    setDistrictLists(bdDistricts[div])
-  }
+    dispatch({ type: "addDivision", payload: div });
+    setDistrictLists(bdDistricts[div]);
+  };
 
   const areaHandle = (e) => {
     const dist = e.target.value;
-    dispatch({type: 'addDistrict', payload: dist})
+    dispatch({ type: "addDistrict", payload: dist });
     setAreaLists(bdAreas[state.division][dist]);
-  }
+  };
 
   const getArea = (e) => {
-    dispatch({type: 'addArea', payload: e.target.value})
-  }
+    dispatch({ type: "addArea", payload: e.target.value });
+  };
 
-  const inputHandle = e => {
+  const inputHandle = (e) => {
     dispatch({
-      type: 'addFlatData',
-      payload: {[e.target.name] : e.target.value}
-    })
-  }
+      type: "addFlatData",
+      payload: { [e.target.name]: e.target.value },
+    });
+  };
 
   const submitHandle = async (e) => {
     e.preventDefault();
@@ -59,7 +58,7 @@ const PostAds = () => {
       title: state.title,
       description: state.description,
       division: state.division,
-      district:state.district,
+      district: state.district,
       area: state.area,
       category: state.flatData.category,
       rent: state.flatData.rent,
@@ -69,28 +68,35 @@ const PostAds = () => {
       availableForm: state.flatData.availableForm,
       phone: state.flatData.phone,
       whatsapp: state.flatData.whatsapp,
-      address: state.flatData.address
-    }
+      address: state.flatData.address,
+    };
     await postAds(data).unwrap();
-    console.log(data)
+    console.log(data);
 
     e.target.reset();
-    navigate('/ads')
-  }
-      
+    navigate("/ads");
+  };
+
   return (
     <div className="container mx-auto px-6">
-        <div className="py-8">
-            <h1 className="text-4xl font-bold bg-[rgb(60,80,107)] text-white text-center rounded py-6">Post New Ads</h1>
-        </div>
-      <form onSubmit={submitHandle} className="w-full mx-auto bg-white p-6 rounded-md shadow-md">
-
+      <div className="py-8">
+        <h1 className="text-4xl font-bold bg-[rgb(60,80,107)] text-white text-center rounded py-6">
+          Post New Ads
+        </h1>
+      </div>
+      <form
+        onSubmit={submitHandle}
+        className="w-full mx-auto bg-white p-6 rounded-md shadow-md"
+      >
         {/* Title */}
         <div className="mb-4">
-          <label htmlFor="title" className="block text-sm font-medium text-gray-600">
+          <label
+            htmlFor="title"
+            className="block text-sm font-medium text-gray-600"
+          >
             Title
           </label>
-          <input 
+          <input
             onChange={getTitle}
             required
             type="text"
@@ -104,7 +110,10 @@ const PostAds = () => {
 
         {/* Description */}
         <div className="mb-4">
-          <label htmlFor="description" className="block text-sm font-medium text-gray-600">
+          <label
+            htmlFor="description"
+            className="block text-sm font-medium text-gray-600"
+          >
             Description
           </label>
           <textarea
@@ -119,11 +128,13 @@ const PostAds = () => {
         </div>
 
         {/* Two-Column Layout */}
-        <div className="grid grid-cols-2 gap-4">
-
+        <div className="grid sm:grid-cols-2 gap-4">
           {/* Division */}
           <div className="mb-4">
-            <label htmlFor="division" className="block text-sm font-medium text-gray-600">
+            <label
+              htmlFor="division"
+              className="block text-sm font-medium text-gray-600"
+            >
               Division
             </label>
             <select
@@ -134,7 +145,9 @@ const PostAds = () => {
               className="mt-1 p-2 outline-none focus:border-black w-full border rounded-sm"
               value={state.division}
             >
-              <option defaultValue="Select Your Division">Select Division</option>
+              <option defaultValue="Select Your Division">
+                Select Division
+              </option>
               <option value="Dhaka">Dhaka</option>
               <option value="Barishal">Barishal</option>
               <option value="Khulna">Khulna</option>
@@ -148,7 +161,10 @@ const PostAds = () => {
 
           {/* District */}
           <div className="mb-4">
-            <label htmlFor="district" className="block text-sm font-medium text-gray-600">
+            <label
+              htmlFor="district"
+              className="block text-sm font-medium text-gray-600"
+            >
               District
             </label>
             <select
@@ -158,18 +174,33 @@ const PostAds = () => {
               className="mt-1 p-2 outline-none focus:border-black w-full border rounded-sm"
               value={state.district}
             >
-              <option defaultValue={districtLists?.length > 0 ? "Select District" : 'Select Division First'}>{districtLists?.length > 0 ? "Select District" : 'Select Division First'}</option>
-              {
-                districtLists?.length > 0 ? (districtLists.map((district, index) => (
-                    <option key={index} value={district}>{district}</option>
-                ))) : ""
-              }
+              <option
+                defaultValue={
+                  districtLists?.length > 0
+                    ? "Select District"
+                    : "Select Division First"
+                }
+              >
+                {districtLists?.length > 0
+                  ? "Select District"
+                  : "Select Division First"}
+              </option>
+              {districtLists?.length > 0
+                ? districtLists.map((district, index) => (
+                    <option key={index} value={district}>
+                      {district}
+                    </option>
+                  ))
+                : ""}
             </select>
           </div>
 
           {/* Area */}
           <div className="mb-4">
-            <label htmlFor="area" className="block text-sm font-medium text-gray-600">
+            <label
+              htmlFor="area"
+              className="block text-sm font-medium text-gray-600"
+            >
               Area
             </label>
             <select
@@ -179,18 +210,33 @@ const PostAds = () => {
               className="mt-1 p-2 outline-none focus:border-black w-full border rounded-sm"
               value={state.area}
             >
-              <option defaultValue={areaLists?.length > 0 ? "Select Area" : 'Select District First'}>{areaLists?.length > 0 ? "Select Area" : 'Select District First'}</option>
-              {
-                areaLists?.length > 0 ? (areaLists.map((area, index) => (
-                    <option key={index} value={area}>{area}</option>
-                ))) : ""
-              }
+              <option
+                defaultValue={
+                  areaLists?.length > 0
+                    ? "Select Area"
+                    : "Select District First"
+                }
+              >
+                {areaLists?.length > 0
+                  ? "Select Area"
+                  : "Select District First"}
+              </option>
+              {areaLists?.length > 0
+                ? areaLists.map((area, index) => (
+                    <option key={index} value={area}>
+                      {area}
+                    </option>
+                  ))
+                : ""}
             </select>
           </div>
 
           {/* Category */}
           <div className="mb-4">
-            <label htmlFor="division" className="block text-sm font-medium text-gray-600">
+            <label
+              htmlFor="division"
+              className="block text-sm font-medium text-gray-600"
+            >
               Category
             </label>
             <select
@@ -200,7 +246,9 @@ const PostAds = () => {
               name="category"
               className="mt-1 p-2 outline-none focus:border-black w-full border rounded-sm"
             >
-              <option defaultValue="Select Your Division">Select Category</option>
+              <option defaultValue="Select Your Division">
+                Select Category
+              </option>
               <option value="Bachelor-Male">Bachelor-Male</option>
               <option value="Bachelor-Female">Bachelor-Female</option>
               <option value="Family">Family</option>
@@ -211,7 +259,10 @@ const PostAds = () => {
 
           {/* Rent */}
           <div className="mb-4">
-            <label htmlFor="rent" className="block text-sm font-medium text-gray-600">
+            <label
+              htmlFor="rent"
+              className="block text-sm font-medium text-gray-600"
+            >
               Rent
             </label>
             <input
@@ -226,7 +277,10 @@ const PostAds = () => {
 
           {/* Floor */}
           <div className="mb-4">
-            <label htmlFor="floor" className="block text-sm font-medium text-gray-600">
+            <label
+              htmlFor="floor"
+              className="block text-sm font-medium text-gray-600"
+            >
               Floor
             </label>
             <input
@@ -241,7 +295,10 @@ const PostAds = () => {
 
           {/* Bedroom */}
           <div className="mb-4">
-            <label htmlFor="bedroom" className="block text-sm font-medium text-gray-600">
+            <label
+              htmlFor="bedroom"
+              className="block text-sm font-medium text-gray-600"
+            >
               Bedroom
             </label>
             <input
@@ -256,7 +313,10 @@ const PostAds = () => {
 
           {/* Bathroom */}
           <div className="mb-4">
-            <label htmlFor="bathroom" className="block text-sm font-medium text-gray-600">
+            <label
+              htmlFor="bathroom"
+              className="block text-sm font-medium text-gray-600"
+            >
               Bathroom
             </label>
             <input
@@ -271,7 +331,10 @@ const PostAds = () => {
 
           {/* available form */}
           <div className="mb-4">
-            <label htmlFor="division" className="block text-sm font-medium text-gray-600">
+            <label
+              htmlFor="division"
+              className="block text-sm font-medium text-gray-600"
+            >
               Available Form
             </label>
             <select
@@ -283,18 +346,20 @@ const PostAds = () => {
               value={state.flatData.availableForm}
             >
               <option defaultValue="Select Month">Select Month</option>
-              {
-                upCommingMonths.map((month, index) => (
-                  <option key={index} value={month}>{month}</option>
-                ))
-              }
-              
+              {upCommingMonths.map((month, index) => (
+                <option key={index} value={month}>
+                  {month}
+                </option>
+              ))}
             </select>
           </div>
 
           {/* Phone */}
           <div className="mb-4">
-            <label htmlFor="phone" className="block text-sm font-medium text-gray-600">
+            <label
+              htmlFor="phone"
+              className="block text-sm font-medium text-gray-600"
+            >
               Phone
             </label>
             <input
@@ -309,7 +374,10 @@ const PostAds = () => {
 
           {/* WhatsApp */}
           <div className="mb-4">
-            <label htmlFor="whatsapp" className="block text-sm font-medium text-gray-600">
+            <label
+              htmlFor="whatsapp"
+              className="block text-sm font-medium text-gray-600"
+            >
               WhatsApp
             </label>
             <input
@@ -325,7 +393,10 @@ const PostAds = () => {
 
         {/* Address */}
         <div className="mb-4">
-          <label htmlFor="address" className="block text-sm font-medium text-gray-600">
+          <label
+            htmlFor="address"
+            className="block text-sm font-medium text-gray-600"
+          >
             Address
           </label>
           <textarea
@@ -353,9 +424,11 @@ const PostAds = () => {
 
 export default PostAds;
 
-
-{/* other facilities */}
-{/* <div className="mb-4">
+{
+  /* other facilities */
+}
+{
+  /* <div className="mb-4">
 <label >Other Facilities:</label>
 <div className="flex gap-1">
   <input id="lift" name="lift" type="checkbox" />
@@ -373,4 +446,5 @@ export default PostAds;
   <input id="generator" name="generator" type="checkbox" />
   <label htmlFor="generator">Generator</label>
 </div>
-</div> */}
+</div> */
+}

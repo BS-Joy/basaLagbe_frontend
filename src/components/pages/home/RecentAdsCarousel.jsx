@@ -1,13 +1,9 @@
 import { useEffect } from "react";
 import Glide from "@glidejs/glide";
 import AdsCard from "../ads/AdsCard";
-import { useGetAdsQuery } from "../../../feature/ads/adsSlice";
-import LoadingAnimation from "../../LoadingAnimation";
 import EmptyMessage from "../../global/EmptyMessage";
 
-const RecentAdsCarousel = () => {
-  const { data: ads, isSuccess, isError, isLoading, error } = useGetAdsQuery();
-
+const RecentAdsCarousel = ({ ads }) => {
   useEffect(() => {
     const slider = new Glide(".glide-04", {
       type: "slider",
@@ -28,27 +24,6 @@ const RecentAdsCarousel = () => {
     };
   }, []);
 
-  let recent;
-
-  if (isLoading) {
-    recent = <LoadingAnimation />;
-  } else if (isError) {
-    recent = <p>{error}</p>;
-  } else if (isSuccess) {
-    recent =
-      ads?.length > 0 ? (
-        ads?.map((ad) => {
-          return (
-            <li key={ad._id} className="border rounded-md">
-              <AdsCard ad={ad} />
-            </li>
-          );
-        })
-      ) : (
-        <EmptyMessage message="No blogs available to show" />
-      );
-  }
-
   return (
     <>
       {/*<!-- Component: Slider with controls outside --> */}
@@ -56,7 +31,20 @@ const RecentAdsCarousel = () => {
         {/*    <!-- Slides --> */}
         <div className="overflow-hidden" data-glide-el="track">
           <ul className="whitespace-no-wrap flex-no-wrap [backface-visibility: hidden] [transform-style: preserve-3d] [touch-action: pan-Y] [will-change: transform] relative flex w-full overflow-hidden p-0">
-            {recent}
+            {ads?.length > 0 ? (
+              ads?.map((ad) => {
+                return (
+                  <li key={ad._id} className="border rounded-md">
+                    <AdsCard ad={ad} />
+                  </li>
+                );
+              })
+            ) : (
+              <EmptyMessage
+                message="No blogs available to show"
+                showBtn={true}
+              />
+            )}
           </ul>
         </div>
         {/*    <!-- Controls --> */}

@@ -1,5 +1,8 @@
 import { Link, useParams } from "react-router-dom";
-import { useGetAdsQuery } from "../../../feature/ads/adsSlice";
+import {
+  useGetAdsByIdQuery,
+  useGetAdsQuery,
+} from "../../../feature/ads/adsSlice";
 import LoadingAnimation from "../../LoadingAnimation";
 import { BsBuildingUp } from "react-icons/bs";
 import { TbBed } from "react-icons/tb";
@@ -19,17 +22,19 @@ import { IoLogoWhatsapp } from "react-icons/io";
 import { useEffect } from "react";
 import { getCurrentUser } from "../../../feature/user/userSlice";
 import { useSelector } from "react-redux";
+import EmptyMessage from "../../global/EmptyMessage";
+import ErrorComponent from "../../global/ErrorComponent";
 
 const AdsDetail = () => {
   const { id: adId } = useParams();
-  const { ad, isLoading } = useGetAdsQuery("getAds", {
-    selectFromResult: ({ data, isLoading }) => {
-      return { ad: data?.entities[adId], isLoading };
-    },
-  });
+  // const { ad, isLoading } = useGetAdsQuery("getAds", {
+  //   selectFromResult: ({ data, isLoading }) => {
+  //     return { ad: data?.entities[adId], isLoading };
+  //   },
+  // });
 
+  const { data: ad, isLoading, isError, error } = useGetAdsByIdQuery(adId);
   const user = useSelector(getCurrentUser);
-  console.log(user);
 
   useEffect(() => {
     // Scroll to the top of the page when the component mounts
@@ -38,8 +43,12 @@ const AdsDetail = () => {
 
   if (isLoading) return <LoadingAnimation />;
 
+  if (isError) {
+    return <ErrorComponent errMessage={error?.data?.error ?? error?.status} />;
+  }
+
   if (!ad) {
-    return <p>No ads found</p>;
+    return <EmptyMessage message="No ads found" />;
   }
 
   return (
@@ -132,7 +141,14 @@ const AdsDetail = () => {
                       </p>
                     </div>
                   ) : (
-                    <p className="text-black">Please <Link to="/login" className="text-blue-500 underline"> Log in</Link> to see contact informations</p>
+                    <p className="text-black">
+                      Please{" "}
+                      <Link to="/login" className="text-blue-500 underline">
+                        {" "}
+                        Log in
+                      </Link>{" "}
+                      to see contact informations
+                    </p>
                   )}
                 </div>
               </div>

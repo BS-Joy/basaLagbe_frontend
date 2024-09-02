@@ -30,8 +30,30 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
             ]
           : [{ type: "ads", id: "AUTHOR" }],
     }),
+    getAdsById: builder.query({
+      query: (adId) => `/ads/${adId}`,
+      providesTags: (result) =>
+        result
+          ? [
+              { type: "ads", id: "adId" },
+              { type: "ads", id: result?._id },
+            ]
+          : [{ type: "ads", id: "adId" }],
+    }),
+    deleteAd: builder?.mutation({
+      query: ({ adId }) => ({
+        url: `/ads/${adId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: (result, error, arg) => [{ type: "ads", id: arg?.adId }],
+    }),
   }),
 });
 
-export const { usePostAdsMutation, useGetAdsQuery, useGetAdsByAuthorQuery } =
-  extendedApiSlice;
+export const {
+  usePostAdsMutation,
+  useGetAdsQuery,
+  useGetAdsByAuthorQuery,
+  useGetAdsByIdQuery,
+  useDeleteAdMutation,
+} = extendedApiSlice;

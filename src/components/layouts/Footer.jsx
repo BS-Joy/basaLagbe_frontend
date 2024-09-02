@@ -1,12 +1,10 @@
-
-
 export default function Footer() {
   return (
     <>
       {/*    <!-- Component: Five Columns Footer with Logo --> */}
       <footer className="w-full text-white">
         {/*      <!-- Main footer --> */}
-        <div className="border-t border-slate-200 bg-[rgb(60,80,107)] pt-16 pb-12 text-sm">
+        <div className="border-t border-slate-200 bg-[rgb(51,68,91)] pt-16 pb-12 text-sm">
           <div className="container mx-auto px-6">
             <div className="grid grid-cols-4 gap-6 md:grid-cols-8 lg:grid-cols-12">
               <div
@@ -18,7 +16,6 @@ export default function Footer() {
                   aria-label="WindUI logo"
                   aria-current="page"
                   className="mb-6 flex items-center gap-2 whitespace-nowrap text-base font-medium leading-6 text-white focus:outline-none"
-                  
                 >
                   <svg
                     width="300"
@@ -61,34 +58,22 @@ export default function Footer() {
                 </h3>
                 <ul>
                   <li className="mb-2 leading-6">
-                    <a
-                      
-                      className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600"
-                    >
+                    <a className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600">
                       Features
                     </a>
                   </li>
                   <li className="mb-2 leading-6">
-                    <a
-                      
-                      className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600"
-                    >
+                    <a className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600">
                       Customers
                     </a>
                   </li>
                   <li className="mb-2 leading-6">
-                    <a
-                      
-                      className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600"
-                    >
+                    <a className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600">
                       Why us?
                     </a>
                   </li>
                   <li className="mb-2 leading-6">
-                    <a
-                      
-                      className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600"
-                    >
+                    <a className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600">
                       Pricing
                     </a>
                   </li>
@@ -106,42 +91,27 @@ export default function Footer() {
                 </h3>
                 <ul>
                   <li className="mb-2 leading-6">
-                    <a
-                      
-                      className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600"
-                    >
+                    <a className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600">
                       Documentation
                     </a>
                   </li>
                   <li className="mb-2 leading-6">
-                    <a
-                      
-                      className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600"
-                    >
+                    <a className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600">
                       Training
                     </a>
                   </li>
                   <li className="mb-2 leading-6">
-                    <a
-                      
-                      className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600"
-                    >
+                    <a className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600">
                       System status
                     </a>
                   </li>
                   <li className="mb-2 leading-6">
-                    <a
-                      
-                      className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600"
-                    >
+                    <a className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600">
                       FAQ&apos;s
                     </a>
                   </li>
                   <li className="mb-2 leading-6">
-                    <a
-                      
-                      className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600"
-                    >
+                    <a className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600">
                       Help Center
                     </a>
                   </li>
@@ -159,42 +129,27 @@ export default function Footer() {
                 </h3>
                 <ul>
                   <li className="mb-2 leading-6">
-                    <a
-                      
-                      className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600"
-                    >
+                    <a className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600">
                       About us
                     </a>
                   </li>
                   <li className="mb-2 leading-6">
-                    <a
-                      
-                      className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600"
-                    >
+                    <a className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600">
                       Careers
                     </a>
                   </li>
                   <li className="mb-2 leading-6">
-                    <a
-                      
-                      className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600"
-                    >
+                    <a className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600">
                       Leadership
                     </a>
                   </li>
                   <li className="mb-2 leading-6">
-                    <a
-                      
-                      className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600"
-                    >
+                    <a className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600">
                       Blog
                     </a>
                   </li>
                   <li className="mb-2 leading-6">
-                    <a
-                      
-                      className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600"
-                    >
+                    <a className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600">
                       Events
                     </a>
                   </li>
@@ -212,34 +167,22 @@ export default function Footer() {
                 </h3>
                 <ul>
                   <li className="mb-2 leading-6">
-                    <a
-                      
-                      className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600"
-                    >
+                    <a className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600">
                       Contact
                     </a>
                   </li>
                   <li className="mb-2 leading-6">
-                    <a
-                      
-                      className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600"
-                    >
+                    <a className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600">
                       Support
                     </a>
                   </li>
                   <li className="mb-2 leading-6">
-                    <a
-                      
-                      className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600"
-                    >
+                    <a className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600">
                       Partners
                     </a>
                   </li>
                   <li className="mb-2 leading-6">
-                    <a
-                      
-                      className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600"
-                    >
+                    <a className="transition-colors duration-300 hover:text-indigo-500 focus:text-indigo-600">
                       Join research
                     </a>
                   </li>
@@ -251,5 +194,5 @@ export default function Footer() {
       </footer>
       {/*    <!-- End Five Columns Footer with Logo --> */}
     </>
-  )
+  );
 }

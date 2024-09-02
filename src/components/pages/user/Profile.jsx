@@ -1,34 +1,10 @@
+import { FaCircleUser } from "react-icons/fa6";
+import AdsByAuthorTable from "./AdsByAuthorTable";
 import { useSelector } from "react-redux";
 import { getCurrentUser } from "../../../feature/user/userSlice";
-import { FaCircleUser } from "react-icons/fa6";
-import { useGetAdsByAuthorQuery } from "../../../feature/ads/adsSlice";
-import AdsByAuthorList from "./AdsByAuthorList";
-import LoadingAnimation from "../../LoadingAnimation";
 
 const Profile = () => {
   const user = useSelector(getCurrentUser);
-  const authorId = user?._id;
-
-  const {
-    data: ads,
-    isSuccess,
-    isError,
-    isLoading,
-    error,
-    status,
-  } = useGetAdsByAuthorQuery(authorId);
-
-  let adsByAuthor;
-
-  if (isLoading) {
-    return <LoadingAnimation />;
-  }
-  if (isError) {
-    adsByAuthor = error;
-  } else if (isSuccess) {
-    adsByAuthor = <AdsByAuthorList ads={ads} />;
-  }
-
   return (
     <div className="flex flex-col lg:flex-row gap-4 px-6 container mx-auto py-6">
       {/* profile card */}
@@ -73,31 +49,7 @@ const Profile = () => {
           <div className="p-4">
             <div className="relative w-full overflow-auto">
               {/* table */}
-              <table className="w-full caption-bottom text-sm">
-                {/* table header */}
-                <thead className="[&amp;_tr]:border-b">
-                  <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
-                    <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
-                      Ads ID
-                    </th>
-                    <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
-                      Title
-                    </th>
-                    <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
-                      Rent/Month
-                    </th>
-                    <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
-                      Available Form
-                    </th>
-                    <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-
-                {/* table body */}
-                {adsByAuthor}
-              </table>
+              <AdsByAuthorTable />
             </div>
           </div>
         </div>
