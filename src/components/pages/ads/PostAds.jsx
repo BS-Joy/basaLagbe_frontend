@@ -5,6 +5,7 @@ import { initialState, postAdsReducer } from "../../../reducers/postAdsReducer";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getCurrentUser } from "../../../feature/user/userSlice";
+import toast from "react-hot-toast";
 
 const PostAds = () => {
   const [state, dispatch] = useReducer(postAdsReducer, initialState);
@@ -70,11 +71,17 @@ const PostAds = () => {
       whatsapp: state.flatData.whatsapp,
       address: state.flatData.address,
     };
-    await postAds(data).unwrap();
-    console.log(data);
+    try {
+      const res = await postAds(data).unwrap();
 
-    e.target.reset();
-    navigate("/ads");
+      if (res?._id) {
+        e.target.reset();
+        toast.success("Ads posted successfully");
+        navigate(`/ads/${res?._id}`);
+      }
+    } catch (err) {
+      toast.error(err);
+    }
   };
 
   return (
@@ -234,7 +241,7 @@ const PostAds = () => {
           {/* Category */}
           <div className="mb-4">
             <label
-              htmlFor="division"
+              htmlFor="category"
               className="block text-sm font-medium text-gray-600"
             >
               Category
@@ -332,7 +339,7 @@ const PostAds = () => {
           {/* available form */}
           <div className="mb-4">
             <label
-              htmlFor="division"
+              htmlFor="availableForm"
               className="block text-sm font-medium text-gray-600"
             >
               Available Form

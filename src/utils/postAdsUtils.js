@@ -18,9 +18,15 @@ const yearNow = new Date().getFullYear();
 export const getMonths = () => {
   let upcommingMonths;
   const currentMonthIndex = new Date().getMonth();
-  console.log(typeof currentMonthIndex);
+  if (currentMonthIndex === 10) {
+    const newMonths = months.slice(currentMonthIndex + 1);
+    upcommingMonths = [
+      `${newMonths}, ${yearNow}`,
+      `${months[0]}, ${Number(yearNow + 1)}`,
+    ];
+    return upcommingMonths;
+  }
   if (currentMonthIndex === 11) {
-    // const newMonths = months.slice(currentMonthIndex + 1);
     upcommingMonths = months.map((month) => {
       return month + ", " + Number(yearNow + 1);
     });
@@ -74,7 +80,7 @@ export const bdDistricts = {
     "Jaipurhat",
     "Naogaon",
     "Natore",
-    "Nawabganj",
+    "Chapainawabganj",
     "Pabna",
     "Sirajganj",
   ],

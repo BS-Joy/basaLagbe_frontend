@@ -4,6 +4,8 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getAds: builder.query({
       query: () => "/ads",
+      transformResponse: (res) =>
+        res?.toSorted((a, b) => Number(a.rent) - Number(b.rent)),
       providesTags: (result) =>
         result?.length
           ? [
@@ -18,7 +20,10 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: newAd,
       }),
-      invalidatesTags: [{ type: "ads", id: "LIST" }],
+      invalidatesTags: [
+        { type: "ads", id: "LIST" },
+        { type: "ads", id: "AUTHOR" },
+      ],
     }),
     getAdsByAuthor: builder.query({
       query: (authorId) => `/ads/author/${authorId}`,
@@ -40,12 +45,20 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
             ]
           : [{ type: "ads", id: "adId" }],
     }),
-    deleteAd: builder?.mutation({
+    deleteAd: builder.mutation({
       query: ({ adId }) => ({
         url: `/ads/${adId}`,
         method: "DELETE",
       }),
       invalidatesTags: (result, error, arg) => [{ type: "ads", id: arg?.adId }],
+    }),
+    updateAd: builder.mutation({
+      query: (adToUpdate) => ({
+        url: `/ads/${adToUpdate?._id}`,
+        method: "PATCH",
+        body: adToUpdate,
+      }),
+      invalidatesTags: (result, error, arg) => [{ type: "ads", id: arg?._id }],
     }),
   }),
 });
@@ -56,4 +69,5 @@ export const {
   useGetAdsByAuthorQuery,
   useGetAdsByIdQuery,
   useDeleteAdMutation,
+  useUpdateAdMutation,
 } = extendedApiSlice;

@@ -1,6 +1,8 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { getMonths } from "../../../utils/postAdsUtils";
+import { useUpdateAdMutation } from "../../../feature/ads/adsSlice";
+import toast from "react-hot-toast";
 
 export default function AdsUpdateModal({
   isShowing,
@@ -9,12 +11,12 @@ export default function AdsUpdateModal({
   setSelectedAd,
 }) {
   const wrapperRef = useRef(null);
+  const [loading, setLoading] = useState(false);
 
   const upCommingMonths = getMonths();
+  const [updateAd] = useUpdateAdMutation();
 
-  console.log("in modal", upCommingMonths);
-
-  //   for close the modal on click outside of the modal
+  // of:  for close the modal on click outside of the modal
   useEffect(() => {
     function handleClickOutside(event) {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
@@ -95,9 +97,17 @@ export default function AdsUpdateModal({
     }
   };
 
-  const submitHandle = (e) => {
+  const submitHandle = async (e) => {
     e.preventDefault();
-    console.log(selectedAd);
+
+    setLoading(true);
+
+    const res = await updateAd(selectedAd).unwrap();
+    if (res?._id) {
+      setLoading(false);
+      setIsShowing(false);
+      toast.success("Ad updated successfully");
+    }
   };
 
   return (
@@ -393,7 +403,7 @@ export default function AdsUpdateModal({
                         type="submit"
                         className="w-full bg-slate-600 hover:bg-slate-700 text-white p-2 rounded-md"
                       >
-                        Post
+                        {loading ? "Updating..." : "Update"}
                       </button>
                     </div>
                   </form>

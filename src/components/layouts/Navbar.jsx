@@ -199,7 +199,7 @@ export default function Navbar() {
               </div>
             </button>
 
-            {/*      <!-- Navigation links --> */}
+            {/* mobile nav links     <!-- Navigation links --> */}
             <ul
               role="menubar"
               aria-label="Select page"
@@ -243,64 +243,85 @@ export default function Navbar() {
                   <span>Contact Us</span>
                 </Link>
               </li>
-              <li role="none" className="flex items-stretch">
-                <Link
-                  onClick={onActionClicks}
-                  to="/postAds"
-                  role="menuitem"
-                  aria-haspopup="false"
-                  className="flex items-center gap-2 py-4 transition-colors duration-300 hover:text-slate-400 focus:text-slate-300 focus:outline-none focus-visible:outline-none lg:px-8 lg:hidden"
-                >
-                  <span>Post New Ads</span>
-                </Link>
-              </li>
-              <li role="none" className="flex items-stretch">
-                <Link
-                  onClick={onActionClicks}
-                  to="/postAds"
-                  role="menuitem"
-                  aria-haspopup="false"
-                  className="flex items-center gap-2 py-4 transition-colors duration-300 hover:text-slate-400 focus:text-slate-300 focus:outline-none focus-visible:outline-none lg:px-8 lg:hidden"
-                >
-                  <span>Log In</span>
-                </Link>
-              </li>
-              <li role="none" className="flex items-stretch">
-                <Link
-                  onClick={onActionClicks}
-                  to="/postAds"
-                  role="menuitem"
-                  aria-haspopup="false"
-                  className="flex items-center gap-2 py-4 transition-colors duration-300 hover:text-slate-400 focus:text-slate-300 focus:outline-none focus-visible:outline-none lg:px-8 lg:hidden"
-                >
-                  <span>Sign Up</span>
-                </Link>
-              </li>
-              <li role="none" className="flex items-stretch">
-                <Link
-                  onClick={onActionClicks}
-                  to="/postAds"
-                  role="menuitem"
-                  aria-haspopup="false"
-                  className="flex items-center gap-2 py-4 transition-colors duration-300 hover:text-slate-400 focus:text-slate-300 focus:outline-none focus-visible:outline-none lg:px-8 lg:hidden"
-                >
-                  <span>User Name</span>
-                </Link>
-              </li>
-              <li role="none" className="flex items-stretch">
-                <Link
-                  onClick={onActionClicks}
-                  to="/postAds"
-                  role="menuitem"
-                  aria-haspopup="false"
-                  className="flex items-center gap-2 py-4 transition-colors duration-300 hover:text-slate-400 focus:text-slate-300 focus:outline-none focus-visible:outline-none lg:px-8 lg:hidden"
-                >
-                  <span>Log Out</span>
-                </Link>
-              </li>
+
+              {user?._id ? (
+                <>
+                  {/* mobile post new ads */}
+                  <li role="none" className="flex items-stretch">
+                    <Link
+                      onClick={onActionClicks}
+                      to="/postAds"
+                      role="menuitem"
+                      aria-haspopup="false"
+                      className="flex items-center gap-2 py-4 transition-colors duration-300 hover:text-slate-400 focus:text-slate-300 focus:outline-none focus-visible:outline-none lg:px-8 lg:hidden"
+                    >
+                      <span>Post New Ads</span>
+                    </Link>
+                  </li>
+
+                  {/* mobile user name profile link */}
+                  <li role="none" className="flex items-stretch">
+                    <Link
+                      onClick={onActionClicks}
+                      to="/profile"
+                      role="menuitem"
+                      aria-haspopup="false"
+                      className="flex items-center gap-2 py-4 transition-colors duration-300 hover:text-slate-400 focus:text-slate-300 focus:outline-none focus-visible:outline-none lg:px-8 lg:hidden"
+                    >
+                      <span>{user?.username}</span>
+                    </Link>
+                  </li>
+
+                  {/* mobile logout */}
+                  <li role="none" className="flex items-stretch">
+                    <button
+                      onClick={() => {
+                        dispatch(logOut());
+                        if (isToggleOpen) {
+                          setIsToggleOpen(false);
+                        } else isToggleOpen;
+                      }}
+                      to="/postAds"
+                      role="menuitem"
+                      aria-haspopup="false"
+                      className="flex items-center gap-2 py-4 transition-colors duration-300 hover:text-slate-400 focus:text-slate-300 focus:outline-none focus-visible:outline-none lg:px-8 lg:hidden"
+                    >
+                      <span>Log Out</span>
+                    </button>
+                  </li>
+                </>
+              ) : (
+                <>
+                  {/* mobile login */}
+                  <li role="none" className="flex items-stretch">
+                    <Link
+                      onClick={onActionClicks}
+                      to="/login"
+                      role="menuitem"
+                      aria-haspopup="false"
+                      className="flex items-center gap-2 py-4 transition-colors duration-300 hover:text-slate-400 focus:text-slate-300 focus:outline-none focus-visible:outline-none lg:px-8 lg:hidden"
+                    >
+                      <span>Log In</span>
+                    </Link>
+                  </li>
+
+                  {/* mobile signup */}
+                  <li role="none" className="flex items-stretch">
+                    <Link
+                      onClick={onActionClicks}
+                      to="/signup"
+                      role="menuitem"
+                      aria-haspopup="false"
+                      className="flex items-center gap-2 py-4 transition-colors duration-300 hover:text-slate-400 focus:text-slate-300 focus:outline-none focus-visible:outline-none lg:px-8 lg:hidden"
+                    >
+                      <span>Sign Up</span>
+                    </Link>
+                  </li>
+                </>
+              )}
             </ul>
 
-            {/*      <!-- Actions --> */}
+            {/* Actions */}
             <div className="ml-auto flex items-center justify-end px-6 lg:ml-0 lg:flex-1 lg:p-0">
               {/* post new ads button */}
               {user?._id && (
@@ -313,7 +334,7 @@ export default function Navbar() {
                   >
                     <span>Post New Ads</span>
                   </Link>
-                  
+
                   {/* bookmark icon */}
                   <div className="relative inline-flex h-10 w-10 items-center justify-center rounded-full text-lg text-white">
                     <IoBookmarksOutline size={"1.5rem"} />

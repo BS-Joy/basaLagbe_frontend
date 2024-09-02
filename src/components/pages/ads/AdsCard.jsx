@@ -3,10 +3,8 @@ import { IoLocationOutline } from "react-icons/io5";
 import { TbBed } from "react-icons/tb";
 import { PiBathtub } from "react-icons/pi";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
 
 export default function AdsCard({ ad }) {
-  // const ad = useSelector(state => selectAdsById(state, adId));
   return (
     <>
       {/*<!-- Component: Horizontal card--> */}
@@ -40,7 +38,7 @@ export default function AdsCard({ ad }) {
 
             {/* rent */}
             <p className="text-lg flex items-center">
-              <span className="bg-[rgb(51,68,91)] px-[10px] rounded-full text-white">
+              <span className="bg-[rgb(51,68,91)] px-2 rounded-full text-white">
                 ৳
               </span>
               &nbsp;: {ad.rent}/month
@@ -64,7 +62,7 @@ export default function AdsCard({ ad }) {
             </p>
             <hr />
             <Link
-              to={`/details/${ad._id}`}
+              to={`/ads/${ad._id}`}
               className="py-2 rounded bg-[rgb(51,68,91)] hover:bg-[rgb(61,82,109)] text-white text-center"
             >
               See Details

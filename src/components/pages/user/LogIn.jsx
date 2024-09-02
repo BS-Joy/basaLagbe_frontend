@@ -18,7 +18,7 @@ const LogIn = () => {
   });
   const errorState = useSelector(getError);
   const status = useSelector(getStatus);
-  const loading = status === "loading" || false
+  const loading = status === "loading" || false;
   // const [error, setError] = useState(errorState || false);
   // const [loading, setLoading] = useState(false);
 
@@ -33,17 +33,21 @@ const LogIn = () => {
     window.scrollTo(0, 0);
 
     return () => {
-      dispatch(setUserError(null))
-    }
+      dispatch(setUserError(null));
+    };
   }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    try {
       const data = {
         email: formData.email,
         password: formData.password,
       };
       await dispatch(logInUser(data)).unwrap();
+    } catch (err) {
+      throw new Error(err);
+    }
   };
 
   return (

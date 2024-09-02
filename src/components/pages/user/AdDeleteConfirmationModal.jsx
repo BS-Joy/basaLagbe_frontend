@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { useDeleteAdMutation } from "../../../feature/ads/adsSlice";
+import toast from "react-hot-toast";
 
 export default function AdDeleteConfirmationModal({
   showDeleteModal,
@@ -79,10 +80,16 @@ export default function AdDeleteConfirmationModal({
 
   const handleDelete = async () => {
     setLoading(true);
-    const res = await deleteAd({ adId: toDeleteAdId }).unwrap();
-    if (res?._id) {
+    try {
+      const res = await deleteAd({ adId: toDeleteAdId }).unwrap();
+      if (res?._id) {
+        setLoading(false);
+        setShowDeleteModal(false);
+        toast.success("Ad deleted successfully!");
+      }
+    } catch (err) {
       setLoading(false);
-      setShowDeleteModal(false);
+      toast.err(err);
     }
   };
 
