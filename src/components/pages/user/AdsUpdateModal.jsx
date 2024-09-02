@@ -1,5 +1,6 @@
 import { useRef, useEffect } from "react";
 import ReactDOM from "react-dom";
+import { getMonths } from "../../../utils/postAdsUtils";
 
 export default function AdsUpdateModal({
   isShowing,
@@ -8,6 +9,10 @@ export default function AdsUpdateModal({
   setSelectedAd,
 }) {
   const wrapperRef = useRef(null);
+
+  const upCommingMonths = getMonths();
+
+  console.log("in modal", upCommingMonths);
 
   //   for close the modal on click outside of the modal
   useEffect(() => {
@@ -318,11 +323,11 @@ export default function AdsUpdateModal({
                           <option defaultValue="Select Month">
                             Select Month
                           </option>
-                          {/* {upCommingMonths.map((month, index) => (
+                          {upCommingMonths.map((month, index) => (
                             <option key={index} value={month}>
                               {month}
                             </option>
-                          ))} */}
+                          ))}
                         </select>
                       </div>
 

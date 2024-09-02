@@ -15,10 +15,20 @@ const months = [
 
 const yearNow = new Date().getFullYear();
 
-export const getMonth = () => {
+export const getMonths = () => {
+  let upcommingMonths;
   const currentMonthIndex = new Date().getMonth();
+  console.log(typeof currentMonthIndex);
+  if (currentMonthIndex === 11) {
+    // const newMonths = months.slice(currentMonthIndex + 1);
+    upcommingMonths = months.map((month) => {
+      return month + ", " + Number(yearNow + 1);
+    });
+
+    return upcommingMonths;
+  }
   const newMonths = months.slice(currentMonthIndex + 1);
-  const upcommingMonths = newMonths.map((month) => {
+  upcommingMonths = newMonths.map((month) => {
     return month + ", " + yearNow;
   });
   return upcommingMonths;

@@ -1,6 +1,6 @@
 import { useReducer, useState } from "react";
 import { usePostAdsMutation } from "../../../feature/ads/adsSlice";
-import { getMonth, bdDistricts, bdAreas } from "../../../utils/postAdsUtils";
+import { getMonths, bdDistricts, bdAreas } from "../../../utils/postAdsUtils";
 import { initialState, postAdsReducer } from "../../../reducers/postAdsReducer";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -15,7 +15,7 @@ const PostAds = () => {
 
   const [postAds] = usePostAdsMutation();
 
-  const upCommingMonths = getMonth();
+  const upCommingMonths = getMonths();
 
   const user = useSelector(getCurrentUser);
 
