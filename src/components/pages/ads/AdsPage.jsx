@@ -26,14 +26,18 @@ const AdsPage = () => {
   if (isLoading) {
     allAds = <LoadingAnimation />;
   } else if (isError) {
-    allAds = (
-      <ErrorComponent errMessage={error?.data?.error ?? error?.status} />
-    );
+    if (error.status === "FETCH_ERROR") {
+      allAds = <ErrorComponent errMessage="Can't connect to the server" />;
+    } else {
+      allAds = (
+        <ErrorComponent errMessage={error?.data?.error ?? error?.status} />
+      );
+    }
   } else if (isSuccess) {
     allAds =
       ads.length > 0 ? (
         ads.map((ad) => {
-          return <AdsCard key={ad?._id} ad={ad} />;
+          if (ad?.active) return <AdsCard key={ad?._id} ad={ad} />;
         })
       ) : (
         <EmptyMessage message="No blogs available to show" showBtn={true} />

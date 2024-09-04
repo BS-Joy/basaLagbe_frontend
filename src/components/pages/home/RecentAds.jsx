@@ -11,9 +11,13 @@ const RecentAds = () => {
   if (isLoading) {
     recent = <LoadingAnimation />;
   } else if (isError) {
-    recent = (
-      <ErrorComponent errMessage={error?.data?.error ?? error?.status} />
-    );
+    if (error.status === "FETCH_ERROR") {
+      recent = <ErrorComponent errMessage="Can't connect to the server" />;
+    } else {
+      recent = (
+        <ErrorComponent errMessage={error?.data?.error ?? error?.status} />
+      );
+    }
   } else if (isSuccess) {
     recent = <RecentAdsCarousel ads={ads} />;
   }

@@ -9,7 +9,7 @@ const PopularCategories = () => {
       </div>
 
       {/* category cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 p-4 md:p-10 rounded-md border-2 shadow-">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 p-4 md:p-10">
         <CategoryCards />
         <CategoryCards />
         <CategoryCards />

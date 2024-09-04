@@ -1,8 +1,5 @@
 import { Link, useParams } from "react-router-dom";
-import {
-  useGetAdsByIdQuery,
-  useGetAdsQuery,
-} from "../../../feature/ads/adsSlice";
+import { useGetAdsByIdQuery } from "../../../feature/ads/adsSlice";
 import LoadingAnimation from "../../LoadingAnimation";
 import { BsBuildingUp } from "react-icons/bs";
 import { TbBed } from "react-icons/tb";
@@ -36,19 +33,26 @@ const AdsDetail = () => {
   const { data: ad, isLoading, isError, error } = useGetAdsByIdQuery(adId);
   const user = useSelector(getCurrentUser);
 
+  // of: Scroll to the top of the page when the component mounts
   useEffect(() => {
-    // Scroll to the top of the page when the component mounts
     window.scrollTo(0, 0);
   }, []);
 
   if (isLoading) return <LoadingAnimation />;
 
   if (isError) {
-    return <ErrorComponent errMessage={error?.data?.error ?? error?.status} />;
+    console.log(error);
+    if (error.status === "FETCH_ERROR") {
+      return <ErrorComponent errMessage="Can't connect to the server" />;
+    } else {
+      return (
+        <ErrorComponent errMessage={error?.data?.error ?? error?.status} />
+      );
+    }
   }
 
   if (!ad) {
-    return <EmptyMessage message="No ads found" />;
+    return <ErrorComponent errMessage="Ad not found" />;
   }
 
   return (

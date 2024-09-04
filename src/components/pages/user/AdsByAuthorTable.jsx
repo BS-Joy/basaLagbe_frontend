@@ -31,7 +31,13 @@ const AdsByAuthorTable = () => {
     return <LoadingAnimation />;
   }
   if (isError) {
-    return <ErrorComponent errMessage={error?.data?.error ?? error?.status} />;
+    if (error.status === "FETCH_ERROR") {
+      return <ErrorComponent errMessage="Can't connect to the server" />;
+    } else {
+      return (
+        <ErrorComponent errMessage={error?.data?.error ?? error?.status} />
+      );
+    }
   } else if (isSuccess) {
     adsByAuthor = (
       <AdsByAuthorList
@@ -62,6 +68,9 @@ const AdsByAuthorTable = () => {
               </th>
               <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
                 Available Form
+              </th>
+              <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
+                Published
               </th>
               <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground [&amp;:has([role=checkbox])]:pr-0">
                 Actions

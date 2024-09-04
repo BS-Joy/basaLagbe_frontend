@@ -1,3 +1,5 @@
+import AdPublishToggler from "./AdPublishToggler";
+
 const AdsByAuthorList = ({
   ads,
   setIsShowing,
@@ -25,6 +27,7 @@ const AdsByAuthorList = ({
     };
     setSelectedAd(a);
   };
+
   return (
     <tbody className="[&amp;_tr:last-child]:border-0">
       {ads?.map((ad) => (
@@ -45,13 +48,19 @@ const AdsByAuthorList = ({
           <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">
             {ad?.availableForm}
           </td>
+          <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">
+            <AdPublishToggler ad={ad} />
+          </td>
           <td className="p-4 align-middle flex gap-3 [&amp;:has([role=checkbox])]:pr-0">
+            {/* edit button */}
             <button
               onClick={() => handleClick(ad)}
               className="inline-flex w-fit items-center whitespace-nowrap rounded border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2  hover:bg-primary/80 text-blue-700 hover:bg-blue-100 border-blue-500"
             >
               Edit
             </button>
+
+            {/* delete button */}
             <button
               onClick={() => {
                 setShowDeleteModal(true);
