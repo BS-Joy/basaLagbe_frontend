@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import AdPublishToggler from "./AdPublishToggler";
 
 const AdsByAuthorList = ({
@@ -40,7 +41,9 @@ const AdsByAuthorList = ({
                 #{ad?._id.slice(-10)}
               </td> */}
           <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">
-            {ad?.title}
+            <Link className="hover:text-blue-500" to={`/ads/${ad?._id}`}>
+              {ad?.title}
+            </Link>
           </td>
           <td className="p-4 align-middle [&amp;:has([role=checkbox])]:pr-0">
             {ad?.rent} ৳

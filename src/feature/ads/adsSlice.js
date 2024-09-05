@@ -4,8 +4,9 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getAds: builder.query({
       query: () => "/ads",
-      transformResponse: (res) =>
-        res?.toSorted((a, b) => Number(a.rent) - Number(b.rent)),
+      transformResponse: (res) => {
+        return res?.toSorted((a, b) => Number(a.rent) - Number(b.rent));
+      },
       providesTags: (result) =>
         result?.length
           ? [
@@ -58,7 +59,13 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
         method: "PATCH",
         body: adToUpdate,
       }),
-      invalidatesTags: (result, error, arg) => [{ type: "ads", id: arg?._id }],
+      invalidatesTags: (result, error, arg) => [
+        { type: "ads", id: "LIST" },
+        { type: "ads", id: arg?._id },
+      ],
+    }),
+    getCategories: builder.query({
+      query: () => "/category",
     }),
   }),
 });
@@ -70,4 +77,5 @@ export const {
   useGetAdsByIdQuery,
   useDeleteAdMutation,
   useUpdateAdMutation,
+  useGetCategoriesQuery,
 } = extendedApiSlice;

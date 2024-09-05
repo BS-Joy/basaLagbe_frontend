@@ -23,7 +23,7 @@ export default function AdsCard({ ad }) {
             <h2 className="text-2xl font-medium text-slate-700">{ad.title}</h2>
             <p className="text-sm text-green-700">
               {" "}
-              Posted on: {new Date(ad.createdAt).toDateString()}
+              Posted on: {new Date(ad?.createdAt).toDateString()}
             </p>
             <p className="text-sm text-violet-600"> Category: {ad.category}</p>
 
@@ -33,7 +33,7 @@ export default function AdsCard({ ad }) {
               <span className="bg-[rgb(51,68,91)] p-1 rounded-full">
                 <IoLocationOutline size="18px" color="white" />
               </span>
-              &nbsp;: {ad.location.area}, {ad.location.district}
+              &nbsp;: {ad?.location?.area}, {ad?.location?.district}
             </p>
 
             {/* rent */}
@@ -41,7 +41,7 @@ export default function AdsCard({ ad }) {
               <span className="bg-[rgb(51,68,91)] px-2 rounded-full text-white">
                 ৳
               </span>
-              &nbsp;: {ad.rent}/month
+              &nbsp;: {ad?.rent}/month
             </p>
 
             {/* bed room */}
@@ -50,7 +50,7 @@ export default function AdsCard({ ad }) {
               <span className="bg-[rgb(51,68,91)] p-1 rounded-full">
                 <TbBed size="18px" color="white" />
               </span>
-              &nbsp;Bedrooms : {ad.bedroom}
+              &nbsp;Bedrooms : {ad?.bedroom}
             </p>
 
             {/* bathroom */}
@@ -58,11 +58,11 @@ export default function AdsCard({ ad }) {
               <span className="bg-[rgb(51,68,91)] p-1 rounded-full text-white">
                 <PiBathtub size="18px" color="white" />
               </span>
-              &nbsp;Bathrooms: {ad.bathroom}
+              &nbsp;Bathrooms: {ad?.bathroom}
             </p>
             <hr />
             <Link
-              to={`/ads/${ad._id}`}
+              to={`/ads/${ad?._id}`}
               className="py-2 rounded bg-[rgb(51,68,91)] hover:bg-[rgb(61,82,109)] text-white text-center"
             >
               See Details

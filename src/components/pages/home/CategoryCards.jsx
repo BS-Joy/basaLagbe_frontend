@@ -1,4 +1,8 @@
-const CategoryCards = () => {
+const defaultThumbnail =
+  "https://plus.unsplash.com/premium_photo-1680281937008-f9b19ed9afb6?q=80&w=1913&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+
+const CategoryCards = ({ category }) => {
+  const thumbnail = category?.thumbnail || defaultThumbnail;
   return (
     <>
       {/*<!-- Component: E-commerce card --> */}
@@ -6,8 +10,8 @@ const CategoryCards = () => {
         {/*  <!-- Image --> */}
         <figure className="px-8 pt-8">
           <img
-            src="https://images.unsplash.com/photo-1610389051254-64849803c8fd?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="card image"
+            src={thumbnail}
+            alt={category?.title}
             className="aspect-video w-full rounded-md"
           />
         </figure>
@@ -15,10 +19,10 @@ const CategoryCards = () => {
         <div className="p-6">
           <header className="mb-4">
             <h3 className="text-xl font-medium text-slate-700">
-              Category Title
+              {category?.title}
             </h3>
           </header>
-          <p>Total Active Ads: 200</p>
+          <p>Total Active Ads: {category?.totalActiveAds}</p>
         </div>
         {/*  <!-- Action base sized basic button --> */}
         <div className="flex justify-end p-6 pt-0">
