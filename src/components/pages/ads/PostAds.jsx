@@ -1,5 +1,8 @@
 import { useReducer, useState } from "react";
-import { usePostAdsMutation } from "../../../feature/ads/adsSlice";
+import {
+  useGetCategoriesQuery,
+  usePostAdsMutation,
+} from "../../../feature/ads/adsSlice";
 import { getMonths, bdDistricts, bdAreas } from "../../../utils/postAdsUtils";
 import { initialState, postAdsReducer } from "../../../reducers/postAdsReducer";
 import { useNavigate } from "react-router-dom";
@@ -20,30 +23,60 @@ const PostAds = () => {
 
   const user = useSelector(getCurrentUser);
 
+  const {
+    data: allCategories,
+    isLoading,
+    isSuccess,
+    isError,
+  } = useGetCategoriesQuery();
+
+  let categories;
+
+  if (isLoading) {
+    categories = <option defaultValue="loading...">Loading...</option>;
+  } else if (isSuccess) {
+    categories = (
+      <>
+        <option defaultValue="Select Your Division">Select Category</option>
+        {allCategories.map((cat) => (
+          <option key={cat?._id} value={cat?._id}>
+            {cat?.title}
+          </option>
+        ))}
+      </>
+    );
+  }
+
+  // of: handle title
   const getTitle = (e) => {
     dispatch({ type: "addTitle", payload: e.target.value });
   };
 
+  // of: handle description
   const getDesc = (e) => {
     dispatch({ type: "addDescription", payload: e.target.value });
   };
 
+  // of: handle district
   const districtHandle = (e) => {
     const div = e.target.value;
     dispatch({ type: "addDivision", payload: div });
     setDistrictLists(bdDistricts[div]);
   };
 
+  // of: handle area
   const areaHandle = (e) => {
     const dist = e.target.value;
     dispatch({ type: "addDistrict", payload: dist });
     setAreaLists(bdAreas[state.division][dist]);
   };
 
+  // of: get area
   const getArea = (e) => {
     dispatch({ type: "addArea", payload: e.target.value });
   };
 
+  // of: handle flat data input
   const inputHandle = (e) => {
     dispatch({
       type: "addFlatData",
@@ -51,6 +84,7 @@ const PostAds = () => {
     });
   };
 
+  // of: submit form handle
   const submitHandle = async (e) => {
     e.preventDefault();
 
@@ -71,6 +105,8 @@ const PostAds = () => {
       whatsapp: state.flatData.whatsapp,
       address: state.flatData.address,
     };
+
+    // console.log(data);
     try {
       const res = await postAds(data).unwrap();
 
@@ -253,14 +289,16 @@ const PostAds = () => {
               name="category"
               className="mt-1 p-2 outline-none focus:border-black w-full border rounded-sm"
             >
-              <option defaultValue="Select Your Division">
-                Select Category
-              </option>
-              <option value="Bachelor-Male">Bachelor-Male</option>
-              <option value="Bachelor-Female">Bachelor-Female</option>
-              <option value="Family">Family</option>
-              <option value="Sublet-Male">Sublet-Male</option>
-              <option value="Sublet-Female">Sublet-Female</option>
+              {!isError ? (
+                categories
+              ) : (
+                <option
+                  className="text-red-500"
+                  defaultValue="Select Your Division"
+                >
+                  Something went wrong
+                </option>
+              )}
             </select>
           </div>
 

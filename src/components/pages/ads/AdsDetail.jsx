@@ -122,7 +122,7 @@ const AdsDetail = () => {
                       <BiCategoryAlt />
                       Category:
                     </p>
-                    <p>{ad.category}</p>
+                    <p>{ad.category?.title}</p>
                   </div>
                 </div>
 

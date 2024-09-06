@@ -25,7 +25,10 @@ export default function AdsCard({ ad }) {
               {" "}
               Posted on: {new Date(ad?.createdAt).toDateString()}
             </p>
-            <p className="text-sm text-violet-600"> Category: {ad.category}</p>
+            <p className="text-sm text-violet-600">
+              {" "}
+              Category: {ad.category?.title}
+            </p>
 
             {/* location */}
             <p className="text-lg flex items-center">

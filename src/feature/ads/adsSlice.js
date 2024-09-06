@@ -4,9 +4,6 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getAds: builder.query({
       query: () => "/ads",
-      transformResponse: (res) => {
-        return res?.toSorted((a, b) => Number(a.rent) - Number(b.rent));
-      },
       providesTags: (result) =>
         result?.length
           ? [

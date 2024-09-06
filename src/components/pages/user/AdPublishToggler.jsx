@@ -14,10 +14,11 @@ const AdPublishToggler = ({ ad }) => {
     setLoading(true);
     try {
       const res = await updateAd({ _id: ad?._id, active: status }).unwrap();
+
       if (res?._id) {
         setLoading(false);
         setActiveStatus(status);
-        console.log(res?.active);
+
         if (res?.active) {
           toast.success("Ad is published now.");
         } else toast.success("Ad is hidden now.");

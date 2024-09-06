@@ -498,6 +498,14 @@ export const bdAreas = {
       "Lalmonirhat Sadar",
       "Patgram",
     ],
+    Nilphamari: [
+      "Nilphamari Sadar",
+      "Saidpur",
+      "Dimla",
+      "Domar",
+      "Jaldhaka",
+      "Kishoreganj",
+    ],
   },
   Mymensingh: {
     Mymensingh: [
