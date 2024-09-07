@@ -3,7 +3,7 @@ import emptyStatusImage from "../../assets/Empty.svg";
 
 const EmptyMessage = ({ message, showBtn }) => {
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center w-full">
       <img
         className="w-3/4 bg-slate-200 p-8 rounded-full sm:w-1/4"
         src={emptyStatusImage}

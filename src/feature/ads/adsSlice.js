@@ -3,7 +3,12 @@ import { apiSlice } from "../api/apiSlice";
 export const extendedApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getAds: builder.query({
-      query: () => "/ads",
+      query: (cat) => {
+        // console.log(cat);
+        return {
+          url: `/ads/getAds/${cat}`,
+        };
+      },
       providesTags: (result) =>
         result?.length
           ? [

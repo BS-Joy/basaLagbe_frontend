@@ -2,7 +2,7 @@ import { useGetCategoriesQuery } from "../../../feature/ads/adsSlice";
 import ErrorComponent from "../../global/ErrorComponent";
 import LoadingAnimation from "../../LoadingAnimation";
 
-const AdsFilter = () => {
+const AdsFilter = ({ selectedCategoryId, setSelectedCategoryId }) => {
   const {
     data: allCategories,
     isSuccess,
@@ -14,11 +14,11 @@ const AdsFilter = () => {
   let categories;
 
   const handleReset = () => {
-    console.log("reset");
+    setSelectedCategoryId("");
   };
 
   const handleFilter = (e) => {
-    console.log(e.target.name);
+    setSelectedCategoryId(e.target.value);
   };
 
   if (isLoading) {
@@ -35,19 +35,21 @@ const AdsFilter = () => {
     categories = allCategories.map((cat) => (
       <li key={cat?._id} className="mb-2 flex gap-2 items-center">
         <input
-          onClick={handleFilter}
+          onChange={handleFilter}
+          checked={selectedCategoryId === cat?._id}
           className="w-4 h-4"
-          type="checkbox"
+          type="radio"
           id={cat?.title}
           value={cat?._id}
-          name={cat?.title}
+          name={"categories"}
         />
         <label htmlFor={cat?.title}>{cat?.title}</label>
       </li>
     ));
   }
+
   return (
-    <div className="border rounded h-min min-w-64">
+    <div className="border rounded h-min min-w-64 sticky top-[88px]">
       {/* by category */}
       <div>
         <h2 className="py-3 pl-4 border-b text-sm bg-neutral-100">
