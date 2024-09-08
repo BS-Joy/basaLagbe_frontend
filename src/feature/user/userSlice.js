@@ -3,27 +3,31 @@ import axios from "axios";
 
 const baseUrl = "http://localhost:8000/user";
 
-export const signUpUser = createAsyncThunk("/signUp", async (userData, {rejectWithValue}) => {
-  try{
-    const response = await axios.post(`${baseUrl}`, userData);
+export const signUpUser = createAsyncThunk(
+  "/signUp",
+  async (userData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${baseUrl}`, userData);
 
-  return response.data;
-  } catch (err) {
-
-    console.log(err);
-    return rejectWithValue(err?.response?.data?.error || err?.message)
+      return response.data;
+    } catch (err) {
+      console.log(err);
+      return rejectWithValue(err?.response?.data?.error || err?.message);
+    }
   }
-  
-});
+);
 
-export const logInUser = createAsyncThunk("/login", async (credentials, {rejectWithValue}) => {
-  try {
-    const resposne = await axios.post(`${baseUrl}/login`, credentials);
-    return resposne.data;
-  } catch (err) {
-    return rejectWithValue(err?.response?.data?.error || err?.message);
+export const logInUser = createAsyncThunk(
+  "/login",
+  async (credentials, { rejectWithValue }) => {
+    try {
+      const resposne = await axios.post(`${baseUrl}/login`, credentials);
+      return resposne.data;
+    } catch (err) {
+      return rejectWithValue(err?.response?.data?.error || err?.message);
+    }
   }
-});
+);
 
 export const fetchAllUSers = createAsyncThunk("user/getUsers", async () => {
   const response = await axios.get(`${baseUrl}/user`);
@@ -34,6 +38,7 @@ const initialState = {
   currentUser: JSON.parse(localStorage.getItem("auth")) || null,
   status: "idle",
   error: null,
+  ads: [],
 };
 
 const userSlice = createSlice({
@@ -45,8 +50,8 @@ const userSlice = createSlice({
       localStorage.removeItem("auth");
     },
     setUserError: (state, action) => {
-      state.error = action.payload
-    }
+      state.error = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder

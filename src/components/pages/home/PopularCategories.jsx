@@ -1,4 +1,4 @@
-import { useGetCategoriesQuery } from "../../../feature/ads/adsSlice";
+import { useGetCategoriesQuery } from "../../../feature/api/apiSlice";
 import ErrorComponent from "../../global/ErrorComponent";
 import LoadingAnimation from "../../LoadingAnimation";
 import CategoryCards from "./CategoryCards";

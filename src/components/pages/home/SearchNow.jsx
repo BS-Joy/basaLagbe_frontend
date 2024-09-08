@@ -1,7 +1,20 @@
 import { MdOutlineSearch } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link, redirect, useNavigate } from "react-router-dom";
+import { getAds } from "../../../feature/ads/adsSlice";
 
-const SearchNow = () => {
+const SearchNow = ({ isAdsPage }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (!isAdsPage) {
+      console.log("not in ads page");
+      navigate("/ads?search=lkdf");
+    } else {
+    }
+  };
   return (
     <div className="w-full container px-6 pb-14 mx-auto">
       <form className="bg-white flex flex-col md:flex-row gap-3 rounded overflow-hidden ml-3">
@@ -99,7 +112,10 @@ const SearchNow = () => {
         </div>
 
         {/* button */}
-        <Link className="bg-[rgb(51,68,91)] transition py-4 md:p-0 hover:bg-[rgb(61,82,109)] text-white md:w-1/4 flex justify-center">
+        <Link
+          onClick={handleSearch}
+          className="bg-[rgb(51,68,91)] transition py-4 md:p-0 hover:bg-[rgb(61,82,109)] text-white md:w-1/4 flex justify-center"
+        >
           <button className="">
             <span className="flex items-center gap-2">
               <span className="bg-white text-black p-[.30rem] rounded-full">

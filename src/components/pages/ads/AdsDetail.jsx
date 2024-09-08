@@ -1,5 +1,5 @@
 import { Link, useParams } from "react-router-dom";
-import { useGetAdsByIdQuery } from "../../../feature/ads/adsSlice";
+import { useGetAdsByIdQuery } from "../../../feature/api/apiSlice";
 import LoadingAnimation from "../../LoadingAnimation";
 import { BsBuildingUp } from "react-icons/bs";
 import { TbBed } from "react-icons/tb";

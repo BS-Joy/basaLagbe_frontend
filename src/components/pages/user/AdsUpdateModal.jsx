@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { getMonths } from "../../../utils/postAdsUtils";
-import { useUpdateAdMutation } from "../../../feature/ads/adsSlice";
+import { useUpdateAdMutation } from "../../../feature/api/apiSlice";
 import toast from "react-hot-toast";
 
 export default function AdsUpdateModal({

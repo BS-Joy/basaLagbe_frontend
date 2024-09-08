@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { getCurrentUser } from "../../../feature/user/userSlice";
-import { useGetAdsByAuthorQuery } from "../../../feature/ads/adsSlice";
+import { useGetAdsByAuthorQuery } from "../../../feature/api/apiSlice";
 import AdsByAuthorList from "./AdsByAuthorList";
 import LoadingAnimation from "../../LoadingAnimation";
 import { useState } from "react";

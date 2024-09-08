@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useUpdateAdMutation } from "../../../feature/ads/adsSlice";
+import { useUpdateAdMutation } from "../../../feature/api/apiSlice";
 import toast from "react-hot-toast";
 import LoadingAnimation from "../../LoadingAnimation";
 

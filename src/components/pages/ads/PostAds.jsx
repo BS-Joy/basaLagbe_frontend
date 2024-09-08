@@ -2,7 +2,7 @@ import { useReducer, useState } from "react";
 import {
   useGetCategoriesQuery,
   usePostAdsMutation,
-} from "../../../feature/ads/adsSlice";
+} from "../../../feature/api/apiSlice";
 import { getMonths, bdDistricts, bdAreas } from "../../../utils/postAdsUtils";
 import { initialState, postAdsReducer } from "../../../reducers/postAdsReducer";
 import { useNavigate } from "react-router-dom";

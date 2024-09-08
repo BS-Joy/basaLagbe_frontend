@@ -1,10 +1,16 @@
-import { useGetAdsQuery } from "../../../feature/ads/adsSlice";
+import { useGetAdsQuery } from "../../../feature/api/apiSlice";
 import RecentAdsCarousel from "./RecentAdsCarousel";
 import LoadingAnimation from "../../LoadingAnimation";
 import ErrorComponent from "../../global/ErrorComponent";
 
 const RecentAds = () => {
-  const { data: ads, isSuccess, isError, isLoading, error } = useGetAdsQuery();
+  const {
+    data: ads,
+    isSuccess,
+    isError,
+    isLoading,
+    error,
+  } = useGetAdsQuery(null);
 
   let recent;
 

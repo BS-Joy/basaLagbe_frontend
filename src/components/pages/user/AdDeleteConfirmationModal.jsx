@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import ReactDOM from "react-dom";
-import { useDeleteAdMutation } from "../../../feature/ads/adsSlice";
+import { useDeleteAdMutation } from "../../../feature/api/apiSlice";
 import toast from "react-hot-toast";
 
 export default function AdDeleteConfirmationModal({

@@ -1,4 +1,4 @@
-import { useGetAdsQuery } from "../../../feature/ads/adsSlice";
+import { useGetAdsQuery } from "../../../feature/api/apiSlice";
 import Hero from "../home/Hero";
 import AdsCard from "./AdsCard";
 import LoadingAnimation from "../../LoadingAnimation";
@@ -7,21 +7,29 @@ import EmptyMessage from "../../global/EmptyMessage";
 import ErrorComponent from "../../global/ErrorComponent";
 import AdsFilter from "./AdsFilter";
 import { CgChevronDown } from "react-icons/cg";
+import { useDispatch, useSelector } from "react-redux";
+import { adsSelector, getAds } from "../../../feature/ads/adsSlice";
 
 const AdsPage = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const { data, isLoading, isSuccess, isError, error } = useGetAdsQuery(
     selectedCategoryId || null
   );
-  const [ads, setAds] = useState([]);
+  // const [ads, setAds] = useState([]);
+
+  const dispatch = useDispatch();
+
+  const ads = useSelector(adsSelector);
 
   let allAds;
 
   useEffect(() => {
     if (isSuccess) {
-      setAds([...data]);
+      // console.log(data);
+      // setAds([...data]);
+      dispatch(getAds(data));
     }
-  }, [isSuccess]);
+  }, [isSuccess, data]);
 
   useEffect(() => {
     // Scroll to the top of the page when the component mounts
@@ -34,20 +42,20 @@ const AdsPage = () => {
     switch (sortType) {
       case "name":
         sortedAds = sortedAds.sort((a, b) => a.title.localeCompare(b.title));
-        setAds(sortedAds);
+        dispatch(getAds(sortedAds));
         break;
       case "rent":
         sortedAds = sortedAds.sort((a, b) => Number(a.rent) - Number(b.rent));
-        setAds(sortedAds);
+        dispatch(getAds(sortedAds));
         break;
       case "date-posted":
         sortedAds = sortedAds.sort((a, b) =>
           b.createdAt.localeCompare(a.createdAt)
         );
-        setAds(sortedAds);
+        dispatch(getAds(sortedAds));
         break;
       default:
-        setAds(ads); // No sorting, default order
+        dispatch(getAds(data)); // No sorting, default order
         break;
     }
   };
@@ -76,7 +84,7 @@ const AdsPage = () => {
 
   return (
     <>
-      <Hero />
+      <Hero isAdsPage={true} />
       {/* filter sidebar */}
       <div
         className={`container mx-auto px-6 my-11 flex ${
