@@ -13,10 +13,15 @@ const AdsPage = () => {
   const { data, isLoading, isSuccess, isError, error } = useGetAdsQuery(
     selectedCategoryId || null
   );
-
-  const ads = data;
+  const [ads, setAds] = useState([]);
 
   let allAds;
+
+  useEffect(() => {
+    if (isSuccess) {
+      setAds([...data]);
+    }
+  }, [isSuccess]);
 
   useEffect(() => {
     // Scroll to the top of the page when the component mounts
@@ -25,15 +30,25 @@ const AdsPage = () => {
 
   const handleSorting = (e) => {
     const sortType = e.target.value;
+    let sortedAds = [...ads];
     switch (sortType) {
       case "name":
-        return ads.toSorted((a, b) => a.title - b.title);
+        sortedAds = sortedAds.sort((a, b) => a.title.localeCompare(b.title));
+        setAds(sortedAds);
+        break;
       case "rent":
-        return ads.toSorted((a, b) => Number(a.rent) - Number(b.price));
+        sortedAds = sortedAds.sort((a, b) => Number(a.rent) - Number(b.rent));
+        setAds(sortedAds);
+        break;
       case "date-posted":
-        return ads.toSorted((a, b) => a.createdAt.localeCompare(b.createdAt));
+        sortedAds = sortedAds.sort((a, b) =>
+          b.createdAt.localeCompare(a.createdAt)
+        );
+        setAds(sortedAds);
+        break;
       default:
-        return ads; // No sorting, default order
+        setAds(ads); // No sorting, default order
+        break;
     }
   };
 
