@@ -10,7 +10,9 @@ const RecentAds = () => {
     isError,
     isLoading,
     error,
-  } = useGetAdsQuery(null);
+  } = useGetAdsQuery({
+    cat: null,
+  });
 
   let recent;
 

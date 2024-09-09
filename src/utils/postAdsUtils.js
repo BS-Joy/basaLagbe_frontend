@@ -99,7 +99,7 @@ export const bdDistricts = {
   Barishal: [
     "Barishal",
     "Bhola",
-    "Jhalokathi",
+    "Jhalakathi",
     "Patuakhali",
     "Pirojpur",
     "Barguna",
@@ -347,6 +347,7 @@ export const bdAreas = {
       "Muladi",
       "Wazirpur",
     ],
+    Jhalakathi: ["Jhalkathi Sadar", "Nalchiti", "Rajapur", "Kathalia"],
     Bhola: [
       "Bhola Sadar",
       "Burhanuddin",
@@ -374,6 +375,14 @@ export const bdAreas = {
       "Nesarabad (Swarupkathi)",
       "Pirojpur Sadar",
       "Zianagar",
+    ],
+    Barguna: [
+      "Barguna Sadar",
+      "Amtali",
+      "Betagi",
+      "Bamna",
+      "Patharghata",
+      "Taltali",
     ],
   },
   Sylhet: {

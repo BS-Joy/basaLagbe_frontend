@@ -7,9 +7,15 @@ export const apiSlice = createApi({
   tagTypes: ["ads", "category"],
   endpoints: (builder) => ({
     getAds: builder.query({
-      query: (cat) => {
+      query: (arg) => {
+        const { cat, queryParams } = arg;
+
+        const query = queryParams
+          ? JSON.stringify(queryParams).toString()
+          : null;
+
         return {
-          url: `/ads/getAds/${cat}`,
+          url: `/ads/getAds/${cat}?searchParams=${query}`,
         };
       },
       providesTags: (result) =>

@@ -1,18 +1,61 @@
+import { useState } from "react";
 import { MdOutlineSearch } from "react-icons/md";
-import { useDispatch } from "react-redux";
-import { Link, redirect, useNavigate } from "react-router-dom";
-import { getAds } from "../../../feature/ads/adsSlice";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { bdAreas, bdDistricts, bdDivisions } from "../../../utils/postAdsUtils";
 
 const SearchNow = ({ isAdsPage }) => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
 
+  // of: getting all the search params
+  const divFormParams = searchParams?.get("div");
+  const distFormParams = searchParams?.get("dist");
+  const areaFormParams = searchParams?.get("area");
+
+  // of: all states
+  const [queryParmas, setQueryParmas] = useState({
+    div: divFormParams || "",
+    dist: distFormParams || "",
+    area: areaFormParams || "",
+  });
+  const [districts, setDistricts] = useState(
+    divFormParams ? bdDistricts[queryParmas?.div] : []
+  );
+  const [areas, setAreas] = useState(
+    distFormParams ? bdAreas[queryParmas?.div][queryParmas?.dist] : []
+  );
+
+  // of: get districts using divison and set division to the queryParmas state
+  const getDistricts = (e) => {
+    const divi = e.target.value;
+    const allDistricts = bdDistricts[divi];
+    setDistricts(allDistricts);
+    setQueryParmas({ ...queryParmas, div: divi });
+  };
+
+  // of: get areas using district and set district to the queryParmas state
+  const getAreas = (e) => {
+    const dist = e.target.value;
+    const allAreas = bdAreas[queryParmas.div][dist];
+    setAreas(allAreas);
+    setQueryParmas({ ...queryParmas, dist });
+  };
+
+  // of: setting area to the queryParamas state
+  const handleAreas = (e) => {
+    const area = e.target.value;
+    setQueryParmas({ ...queryParmas, area });
+  };
+
+  // of: handle search
   const handleSearch = (e) => {
     e.preventDefault();
+    const x = new URLSearchParams(queryParmas);
     if (!isAdsPage) {
-      console.log("not in ads page");
-      navigate("/ads?search=lkdf");
+      navigate("/ads");
+      setSearchParams(x);
     } else {
+      setSearchParams(x);
     }
   };
   return (
@@ -21,15 +64,19 @@ const SearchNow = ({ isAdsPage }) => {
         {/* divison */}
         <div className="relative my-3 md:w-1/4">
           <select
+            onChange={getDistricts}
+            defaultValue={queryParmas.div}
             id="division"
             name="division"
             required
             className="peer relative h-10 w-full appearance-none rounded bg-white px-4 text-sm outline-none transition-all autofill:bg-white focus:border-indigo-500 focus-visible:outline-none focus:focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
           >
-            <option defaultValue="">Division</option>
-            <option value="1">Option 1</option>
-            <option value="2">Option 2</option>
-            <option value="3">Option 3</option>
+            <option defaultValue="Select Division">Select Division</option>
+            {bdDivisions?.map((divi, index) => (
+              <option key={index} value={divi}>
+                {divi}
+              </option>
+            ))}
           </select>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -52,15 +99,27 @@ const SearchNow = ({ isAdsPage }) => {
         {/* district */}
         <div className="relative my-3 md:w-1/4">
           <select
+            onChange={getAreas}
+            defaultValue={queryParmas.dist}
             id="district"
             name="district"
             required
             className="peer relative h-10 w-full appearance-none rounded bg-white px-4 text-sm outline-none transition-all autofill:bg-white focus:border-indigo-500 focus-visible:outline-none focus:focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
           >
-            <option defaultValue="">District</option>
-            <option value="1">Option 1</option>
-            <option value="2">Option 2</option>
-            <option value="3">Option 3</option>
+            {districts?.length > 0 ? (
+              <>
+                <option defaultValue="Select District">Select District</option>
+                {districts?.map((dist, index) => (
+                  <option key={index} value={dist}>
+                    {dist}
+                  </option>
+                ))}
+              </>
+            ) : (
+              <option defaultValue="Select Division First">
+                Select Division First
+              </option>
+            )}
           </select>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -83,15 +142,27 @@ const SearchNow = ({ isAdsPage }) => {
         {/* area */}
         <div className="relative my-3 md:w-1/4">
           <select
+            onChange={handleAreas}
+            defaultValue={queryParmas.area}
             id="area"
             name="area"
             required
             className="peer h-10 w-full appearance-none rounded bg-white px-4 text-sm outline-none transition-all autofill:bg-white focus-visible:outline-none focus:focus-visible:outline-none"
           >
-            <option defaultValue="">Area</option>
-            <option value="1">Option 1</option>
-            <option value="2">Option 2</option>
-            <option value="3">Option 3</option>
+            {areas?.length > 0 ? (
+              <>
+                <option defaultValue="Select Area">Select Area</option>
+                {areas?.map((area, index) => (
+                  <option key={index} value={area}>
+                    {area}
+                  </option>
+                ))}
+              </>
+            ) : (
+              <option defaultValue="Select District First">
+                Select District First
+              </option>
+            )}
           </select>
           <svg
             xmlns="http://www.w3.org/2000/svg"

@@ -8,26 +8,45 @@ import ErrorComponent from "../../global/ErrorComponent";
 import AdsFilter from "./AdsFilter";
 import { CgChevronDown } from "react-icons/cg";
 import { useDispatch, useSelector } from "react-redux";
-import { adsSelector, getAds } from "../../../feature/ads/adsSlice";
+import { getAdsSelector, setAds, sortAds } from "../../../feature/ads/adsSlice";
+import { useSearchParams } from "react-router-dom";
 
 const AdsPage = () => {
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
-  const { data, isLoading, isSuccess, isError, error } = useGetAdsQuery(
-    selectedCategoryId || null
-  );
-  // const [ads, setAds] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const divFormParams = searchParams?.get("div");
+  const distFormParams = searchParams?.get("dist");
+  const areaFormParams = searchParams?.get("area");
+
+  let paramsAvailable = false;
+  const allSearchParams = {
+    division: "",
+    district: "",
+    area: "",
+  };
+
+  if (divFormParams && distFormParams && areaFormParams) {
+    paramsAvailable = true;
+    allSearchParams.division = divFormParams;
+    allSearchParams.district = distFormParams;
+    allSearchParams.area = areaFormParams;
+  }
+
+  const { data, isLoading, isSuccess, isError, error } = useGetAdsQuery({
+    cat: selectedCategoryId || null,
+    queryParams: paramsAvailable ? allSearchParams : null,
+  });
 
   const dispatch = useDispatch();
 
-  const ads = useSelector(adsSelector);
+  const ads = useSelector(getAdsSelector);
 
   let allAds;
 
   useEffect(() => {
     if (isSuccess) {
-      // console.log(data);
-      // setAds([...data]);
-      dispatch(getAds(data));
+      dispatch(setAds(data));
     }
   }, [isSuccess, data]);
 
@@ -38,34 +57,23 @@ const AdsPage = () => {
 
   const handleSorting = (e) => {
     const sortType = e.target.value;
-    let sortedAds = [...ads];
-    switch (sortType) {
-      case "name":
-        sortedAds = sortedAds.sort((a, b) => a.title.localeCompare(b.title));
-        dispatch(getAds(sortedAds));
-        break;
-      case "rent":
-        sortedAds = sortedAds.sort((a, b) => Number(a.rent) - Number(b.rent));
-        dispatch(getAds(sortedAds));
-        break;
-      case "date-posted":
-        sortedAds = sortedAds.sort((a, b) =>
-          b.createdAt.localeCompare(a.createdAt)
-        );
-        dispatch(getAds(sortedAds));
-        break;
-      default:
-        dispatch(getAds(data)); // No sorting, default order
-        break;
-    }
+    dispatch(sortAds({ ads, sortType, originalState: data }));
   };
 
   if (isLoading) {
     allAds = <LoadingAnimation />;
   } else if (isError) {
-    console.log(error);
-    if (error.status === "FETCH_ERROR") {
-      allAds = <ErrorComponent errMessage="Can't connect to the server" />;
+    if (error.status === "FETCH_ERROR" || error.status === 500) {
+      allAds = (
+        <ErrorComponent
+          errMessage={
+            error?.status === 500
+              ? error.data.error
+              : "Can't connect to the server"
+          }
+          serverError={true}
+        />
+      );
     } else {
       allAds = (
         <ErrorComponent errMessage={error?.data?.error ?? error?.status} />
