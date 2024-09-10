@@ -1,8 +1,13 @@
+import { useSearchParams } from "react-router-dom";
 import { useGetCategoriesQuery } from "../../../feature/api/apiSlice";
 import ErrorComponent from "../../global/ErrorComponent";
 import LoadingAnimation from "../../LoadingAnimation";
 
-const AdsFilter = ({ selectedCategoryId, setSelectedCategoryId }) => {
+const AdsFilter = ({
+  selectedCategory,
+  setSelectedCategory,
+  catFormSearchParams,
+}) => {
   const {
     data: allCategories,
     isSuccess,
@@ -11,14 +16,19 @@ const AdsFilter = ({ selectedCategoryId, setSelectedCategoryId }) => {
     error,
   } = useGetCategoriesQuery();
 
+  const [searchParams, setSearchParams] = useSearchParams();
+
   let categories;
 
   const handleReset = () => {
-    setSelectedCategoryId("");
+    setSelectedCategory("");
+    setSearchParams("");
   };
 
   const handleFilter = (e) => {
-    setSelectedCategoryId(e.target.value);
+    const categoryTitle = e.target.value;
+    setSelectedCategory(categoryTitle);
+    setSearchParams({ cat: categoryTitle });
   };
 
   if (isLoading) {
@@ -36,11 +46,11 @@ const AdsFilter = ({ selectedCategoryId, setSelectedCategoryId }) => {
       <li key={cat?._id} className="mb-2 flex gap-2 items-center">
         <input
           onChange={handleFilter}
-          checked={selectedCategoryId === cat?._id}
+          checked={selectedCategory === cat?.title}
           className="w-4 h-4"
           type="radio"
           id={cat?.title}
-          value={cat?._id}
+          value={cat?.title}
           name={"categories"}
         />
         <label htmlFor={cat?.title}>{cat?.title}</label>

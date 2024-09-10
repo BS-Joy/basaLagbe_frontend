@@ -13,13 +13,17 @@ import { useSearchParams } from "react-router-dom";
 import { FaArrowRotateLeft } from "react-icons/fa6";
 
 const AdsPage = () => {
-  const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const [searchParams, setSearchParams] = useSearchParams();
   const [resetInputFields, setResetInputFields] = useState(false);
 
   const divFormParams = searchParams?.get("div");
   const distFormParams = searchParams?.get("dist");
   const areaFormParams = searchParams?.get("area");
+  const categoryFormParams = searchParams?.get("cat");
+
+  const [selectedCategory, setSelectedCategory] = useState(
+    categoryFormParams || ""
+  );
 
   let paramsAvailable = false;
   const allSearchParams = {
@@ -36,7 +40,7 @@ const AdsPage = () => {
   }
 
   const { data, isLoading, isSuccess, isError, error } = useGetAdsQuery({
-    cat: selectedCategoryId || null,
+    cat: selectedCategory || null,
     queryParams: paramsAvailable ? allSearchParams : null,
   });
 
@@ -54,6 +58,7 @@ const AdsPage = () => {
 
   useEffect(() => {
     // Scroll to the top of the page when the component mounts
+    console.log(categoryFormParams);
     window.scrollTo(200, 200);
   }, []);
 
@@ -63,7 +68,7 @@ const AdsPage = () => {
   };
 
   const resetSearch = () => {
-    setSearchParams(new URLSearchParams(""));
+    setSearchParams("");
     setResetInputFields(true);
     dispatch(setAds(data));
   };
@@ -115,8 +120,8 @@ const AdsPage = () => {
       >
         {/* filter */}
         <AdsFilter
-          setSelectedCategoryId={setSelectedCategoryId}
-          selectedCategoryId={selectedCategoryId}
+          setSelectedCategory={setSelectedCategory}
+          selectedCategory={selectedCategory}
         />
 
         {/* ads list */}
