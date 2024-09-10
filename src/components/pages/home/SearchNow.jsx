@@ -1,16 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdOutlineSearch } from "react-icons/md";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { bdAreas, bdDistricts, bdDivisions } from "../../../utils/postAdsUtils";
 
-const SearchNow = ({ isAdsPage }) => {
+const SearchNow = ({
+  isAdsPage,
+  divFormParams,
+  distFormParams,
+  areaFormParams,
+  resetInputFields,
+}) => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-
-  // of: getting all the search params
-  const divFormParams = searchParams?.get("div");
-  const distFormParams = searchParams?.get("dist");
-  const areaFormParams = searchParams?.get("area");
 
   // of: all states
   const [queryParmas, setQueryParmas] = useState({
@@ -24,6 +25,18 @@ const SearchNow = ({ isAdsPage }) => {
   const [areas, setAreas] = useState(
     distFormParams ? bdAreas[queryParmas?.div][queryParmas?.dist] : []
   );
+
+  useEffect(() => {
+    if (resetInputFields) {
+      setQueryParmas({
+        div: "",
+        dist: "",
+        area: "",
+      });
+      setDistricts([]); // Reset districts and areas
+      setAreas([]);
+    }
+  }, [resetInputFields]);
 
   // of: get districts using divison and set division to the queryParmas state
   const getDistricts = (e) => {
@@ -58,6 +71,7 @@ const SearchNow = ({ isAdsPage }) => {
       setSearchParams(x);
     }
   };
+
   return (
     <div className="w-full container px-6 pb-14 mx-auto">
       <form className="bg-white flex flex-col md:flex-row gap-3 rounded overflow-hidden ml-3">
@@ -65,13 +79,13 @@ const SearchNow = ({ isAdsPage }) => {
         <div className="relative my-3 md:w-1/4">
           <select
             onChange={getDistricts}
-            defaultValue={queryParmas.div}
+            value={queryParmas.div}
             id="division"
             name="division"
             required
             className="peer relative h-10 w-full appearance-none rounded bg-white px-4 text-sm outline-none transition-all autofill:bg-white focus:border-indigo-500 focus-visible:outline-none focus:focus-visible:outline-none disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400"
           >
-            <option defaultValue="Select Division">Select Division</option>
+            <option value="Select Division">Select Division</option>
             {bdDivisions?.map((divi, index) => (
               <option key={index} value={divi}>
                 {divi}
@@ -100,7 +114,7 @@ const SearchNow = ({ isAdsPage }) => {
         <div className="relative my-3 md:w-1/4">
           <select
             onChange={getAreas}
-            defaultValue={queryParmas.dist}
+            value={queryParmas.dist}
             id="district"
             name="district"
             required
@@ -108,7 +122,7 @@ const SearchNow = ({ isAdsPage }) => {
           >
             {districts?.length > 0 ? (
               <>
-                <option defaultValue="Select District">Select District</option>
+                <option value="Select District">Select District</option>
                 {districts?.map((dist, index) => (
                   <option key={index} value={dist}>
                     {dist}
@@ -116,7 +130,7 @@ const SearchNow = ({ isAdsPage }) => {
                 ))}
               </>
             ) : (
-              <option defaultValue="Select Division First">
+              <option value="Select Division First">
                 Select Division First
               </option>
             )}
@@ -143,7 +157,7 @@ const SearchNow = ({ isAdsPage }) => {
         <div className="relative my-3 md:w-1/4">
           <select
             onChange={handleAreas}
-            defaultValue={queryParmas.area}
+            value={queryParmas.area}
             id="area"
             name="area"
             required
@@ -151,7 +165,7 @@ const SearchNow = ({ isAdsPage }) => {
           >
             {areas?.length > 0 ? (
               <>
-                <option defaultValue="Select Area">Select Area</option>
+                <option value="Select Area">Select Area</option>
                 {areas?.map((area, index) => (
                   <option key={index} value={area}>
                     {area}
@@ -159,7 +173,7 @@ const SearchNow = ({ isAdsPage }) => {
                 ))}
               </>
             ) : (
-              <option defaultValue="Select District First">
+              <option value="Select District First">
                 Select District First
               </option>
             )}

@@ -1,7 +1,13 @@
 import SearchNow from "./SearchNow";
 import hero from "../../../assets/hero2.jpg";
 
-const Hero = ({ isAdsPage }) => {
+const Hero = ({
+  isAdsPage,
+  divFormParams,
+  distFormParams,
+  areaFormParams,
+  resetInputFields,
+}) => {
   return (
     <>
       <div
@@ -15,7 +21,13 @@ const Hero = ({ isAdsPage }) => {
               Find Your New Address
             </h1>
           </div>
-          <SearchNow isAdsPage={isAdsPage} />
+          <SearchNow
+            isAdsPage={isAdsPage}
+            divFormParams={divFormParams}
+            distFormParams={distFormParams}
+            areaFormParams={areaFormParams}
+            resetInputFields={resetInputFields}
+          />
         </div>
       </div>
     </>
