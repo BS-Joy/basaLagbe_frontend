@@ -58,7 +58,6 @@ const AdsPage = () => {
 
   useEffect(() => {
     // Scroll to the top of the page when the component mounts
-    console.log(categoryFormParams);
     window.scrollTo(200, 200);
   }, []);
 
@@ -143,7 +142,7 @@ const AdsPage = () => {
 
               {/* ads filter */}
               {ads?.length > 0 && (
-                <div className="border shadow-md rounded relative">
+                <div className="border rounded relative">
                   <select
                     name="sort"
                     id="sort"

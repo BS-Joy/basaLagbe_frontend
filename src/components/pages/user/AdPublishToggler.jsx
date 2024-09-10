@@ -1,19 +1,18 @@
 import { useState } from "react";
-import { useUpdateAdMutation } from "../../../feature/api/apiSlice";
+import { useUpdateAdsActiveStatusMutation } from "../../../feature/api/apiSlice";
 import toast from "react-hot-toast";
-import LoadingAnimation from "../../LoadingAnimation";
 
 const AdPublishToggler = ({ ad }) => {
-  const [activeStatus, setActiveStatus] = useState(ad?.active ?? true);
+  const [activeStatus, setActiveStatus] = useState(ad?.active ? true : false);
   const [loading, setLoading] = useState(false);
-  const [updateAd] = useUpdateAdMutation();
+  const [updateAd] = useUpdateAdsActiveStatusMutation();
 
   //   of: handler for toggle active status
   const handlePublishStatus = async (e) => {
     const status = e.target.checked;
     setLoading(true);
     try {
-      const res = await updateAd({ _id: ad?._id, active: status }).unwrap();
+      const res = await updateAd({ adId: ad?._id, active: status }).unwrap();
 
       if (res?._id) {
         setLoading(false);
@@ -24,8 +23,9 @@ const AdPublishToggler = ({ ad }) => {
         } else toast.success("Ad is hidden now.");
       }
     } catch (err) {
+      console.log(err);
       setLoading(false);
-      toast.err(err);
+      toast.error(err.data.error);
     }
   };
 

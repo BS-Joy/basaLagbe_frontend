@@ -5,7 +5,6 @@ const AdsByAuthorList = ({
   ads,
   setIsShowing,
   setSelectedAd,
-  showDeleteModal,
   setShowDeleteModal,
   setToDeleteAdId,
 }) => {

@@ -32,7 +32,12 @@ const AdsByAuthorTable = () => {
   }
   if (isError) {
     if (error.status === "FETCH_ERROR") {
-      return <ErrorComponent errMessage="Can't connect to the server" />;
+      return (
+        <ErrorComponent
+          errMessage="Can't connect to the server"
+          serverError={true}
+        />
+      );
     } else {
       return (
         <ErrorComponent errMessage={error?.data?.error ?? error?.status} />

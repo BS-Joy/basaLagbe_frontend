@@ -1,7 +1,10 @@
 import { useRef, useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { getMonths } from "../../../utils/postAdsUtils";
-import { useUpdateAdMutation } from "../../../feature/api/apiSlice";
+import {
+  useGetCategoriesQuery,
+  useUpdateAdMutation,
+} from "../../../feature/api/apiSlice";
 import toast from "react-hot-toast";
 
 export default function AdsUpdateModal({
@@ -15,6 +18,30 @@ export default function AdsUpdateModal({
 
   const upCommingMonths = getMonths();
   const [updateAd] = useUpdateAdMutation();
+
+  const {
+    data: allCategories,
+    isLoading,
+    isSuccess,
+    isError,
+  } = useGetCategoriesQuery();
+
+  let categories;
+
+  if (isLoading) {
+    categories = <option defaultValue="loading...">Loading...</option>;
+  } else if (isSuccess) {
+    categories = (
+      <>
+        <option defaultValue="Select Your Division">Select Category</option>
+        {allCategories.map((cat) => (
+          <option key={cat?._id} value={cat?._id}>
+            {cat?.title}
+          </option>
+        ))}
+      </>
+    );
+  }
 
   // of:  for close the modal on click outside of the modal
   useEffect(() => {
@@ -102,11 +129,16 @@ export default function AdsUpdateModal({
 
     setLoading(true);
 
-    const res = await updateAd(selectedAd).unwrap();
-    if (res?._id) {
+    try {
+      const res = await updateAd(selectedAd).unwrap();
+      if (res?._id) {
+        setLoading(false);
+        setIsShowing(false);
+        toast.success("Ad updated successfully");
+      }
+    } catch (err) {
       setLoading(false);
-      setIsShowing(false);
-      toast.success("Ad updated successfully");
+      toast.error(err?.data?.error);
     }
   };
 
@@ -162,6 +194,7 @@ export default function AdsUpdateModal({
                     </span>
                   </button>
                 </header>
+
                 {/*        <!-- Modal body --> */}
                 <div id="content-4a" className="flex-1">
                   <form
@@ -225,16 +258,16 @@ export default function AdsUpdateModal({
                           className="mt-1 p-2 outline-none focus:border-black w-full border rounded-sm"
                           value={selectedAd.category}
                         >
-                          <option defaultValue="Select Your Category">
-                            Select Category
-                          </option>
-                          <option value="Bachelor-Male">Bachelor-Male</option>
-                          <option value="Bachelor-Female">
-                            Bachelor-Female
-                          </option>
-                          <option value="Family">Family</option>
-                          <option value="Sublet-Male">Sublet-Male</option>
-                          <option value="Sublet-Female">Sublet-Female</option>
+                          {!isError ? (
+                            categories
+                          ) : (
+                            <option
+                              className="text-red-500"
+                              defaultValue="Select Category"
+                            >
+                              Something went wrong
+                            </option>
+                          )}
                         </select>
                       </div>
 

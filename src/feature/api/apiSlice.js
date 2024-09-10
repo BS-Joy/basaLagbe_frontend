@@ -35,6 +35,7 @@ export const apiSlice = createApi({
       invalidatesTags: [
         { type: "ads", id: "LIST" },
         { type: "ads", id: "AUTHOR" },
+        { type: "category" },
       ],
     }),
     getAdsByAuthor: builder.query({
@@ -62,21 +63,38 @@ export const apiSlice = createApi({
         url: `/ads/${adId}`,
         method: "DELETE",
       }),
-      invalidatesTags: (result, error, arg) => [{ type: "ads", id: arg?.adId }],
+      invalidatesTags: (result, error, arg) => [
+        { type: "ads", id: arg?.adId },
+        { type: "category" },
+      ],
     }),
     updateAd: builder.mutation({
       query: (adToUpdate) => ({
-        url: `/ads/${adToUpdate?._id}`,
+        url: `/ads`,
         method: "PATCH",
         body: adToUpdate,
       }),
       invalidatesTags: (result, error, arg) => [
         { type: "ads", id: "LIST" },
         { type: "ads", id: arg?._id },
+        { type: "category" },
       ],
     }),
     getCategories: builder.query({
       query: () => "/category",
+      providesTags: (result) => [{ type: "category" }],
+    }),
+    updateAdsActiveStatus: builder.mutation({
+      query: (adData) => ({
+        url: `/ads/${adData?.adId}`,
+        method: "PATCH",
+        body: adData,
+      }),
+      invalidatesTags: (result, error, arg) => [
+        { type: "ads", id: "LIST" },
+        { type: "ads", id: arg?._id },
+        { type: "category" },
+      ],
     }),
   }),
 });
@@ -89,4 +107,5 @@ export const {
   useDeleteAdMutation,
   useUpdateAdMutation,
   useGetCategoriesQuery,
+  useUpdateAdsActiveStatusMutation,
 } = apiSlice;

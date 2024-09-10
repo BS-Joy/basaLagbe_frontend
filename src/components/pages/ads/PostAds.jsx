@@ -292,10 +292,7 @@ const PostAds = () => {
               {!isError ? (
                 categories
               ) : (
-                <option
-                  className="text-red-500"
-                  defaultValue="Select Your Division"
-                >
+                <option className="text-red-500" defaultValue="Select Category">
                   Something went wrong
                 </option>
               )}
