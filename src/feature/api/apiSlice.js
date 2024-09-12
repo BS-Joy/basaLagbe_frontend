@@ -8,14 +8,16 @@ export const apiSlice = createApi({
   endpoints: (builder) => ({
     getAds: builder.query({
       query: (arg) => {
-        const { cat, queryParams } = arg;
+        const { cat, queryParams, currentPage: page } = arg;
+
+        console.log(page);
 
         const query = queryParams
           ? JSON.stringify(queryParams).toString()
           : null;
 
         return {
-          url: `/ads/getAds/${cat}?searchParams=${query}`,
+          url: `/ads/getAds/${cat}?searchParams=${query}&page=${page}`,
         };
       },
       providesTags: (result) =>

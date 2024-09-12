@@ -11,19 +11,24 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAdsSelector, setAds, sortAds } from "../../../feature/ads/adsSlice";
 import { useSearchParams } from "react-router-dom";
 import { FaArrowRotateLeft } from "react-icons/fa6";
+import AdsPagination from "./AdsPagination";
 
 const AdsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [resetInputFields, setResetInputFields] = useState(false);
+  const [totalAds, setTotalAds] = useState(0);
 
   const divFormParams = searchParams?.get("div");
   const distFormParams = searchParams?.get("dist");
   const areaFormParams = searchParams?.get("area");
   const categoryFormParams = searchParams?.get("cat");
+  const pageParams = searchParams?.get("page");
 
   const [selectedCategory, setSelectedCategory] = useState(
     categoryFormParams || ""
   );
+
+  const [currentPage, setCurrentPage] = useState(pageParams || 1);
 
   let paramsAvailable = false;
   const allSearchParams = {
@@ -42,6 +47,7 @@ const AdsPage = () => {
   const { data, isLoading, isSuccess, isError, error } = useGetAdsQuery({
     cat: selectedCategory || null,
     queryParams: paramsAvailable ? allSearchParams : null,
+    currentPage,
   });
 
   const dispatch = useDispatch();
@@ -52,12 +58,14 @@ const AdsPage = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      dispatch(setAds(data));
+      dispatch(setAds(data?.data));
+      setTotalAds(data?.total);
     }
   }, [isSuccess, data]);
 
   useEffect(() => {
     // Scroll to the top of the page when the component mounts
+    console.log(currentPage);
     window.scrollTo(200, 200);
   }, []);
 
@@ -113,7 +121,7 @@ const AdsPage = () => {
       />
       {/* filter sidebar */}
       <div
-        className={`container mx-auto px-6 my-11 flex ${
+        className={`container mx-auto px-6 my-11 flex flex-col lg:flex-row ${
           ads?.length > 0 ? "gap-8 justify-between" : "gap-10"
         }`}
       >
@@ -127,7 +135,7 @@ const AdsPage = () => {
 
         <div className="w-full">
           {/* total result and sort */}
-          <div className="flex justify-between mb-6">
+          <div className="flex justify-between items-center mb-6">
             <p className="text-[rgb(100,116,139)]">Showing 12 of 15 Ads</p>
             <div className="flex items-center gap-4">
               {paramsAvailable && (
@@ -146,7 +154,7 @@ const AdsPage = () => {
                   <select
                     name="sort"
                     id="sort"
-                    className="py-2 px-10 transition-all focus:outline-none bg-transparent w-full appearance-none"
+                    className="py-2 px-6 md:px-10 transition-all focus:outline-none bg-transparent w-full appearance-none"
                     onChange={handleSorting}
                   >
                     <option defaultValue="Sort Ads">Sort Ads</option>
@@ -162,6 +170,13 @@ const AdsPage = () => {
 
           {/* all ads */}
           <div className="flex flex-col gap-10">{allAds}</div>
+          <div className="flex justify-center my-6">
+            <AdsPagination
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              totalAds={totalAds}
+            />
+          </div>
         </div>
       </div>
     </>

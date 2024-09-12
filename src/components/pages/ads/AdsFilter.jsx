@@ -59,7 +59,7 @@ const AdsFilter = ({
   }
 
   return (
-    <div className="border rounded h-min min-w-64 sticky top-[88px]">
+    <div className="border rounded h-min min-w-64 static lg:sticky top-[88px]">
       {/* by category */}
       <div>
         <h2 className="py-3 pl-4 border-b text-sm bg-neutral-100">
