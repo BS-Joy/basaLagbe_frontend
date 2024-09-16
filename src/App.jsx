@@ -6,11 +6,12 @@ import ContactPage from "./components/pages/contact/ContactPage";
 import SignUp from "./components/pages/user/SignUp";
 import LogIn from "./components/pages/user/LogIn";
 import PostAds from "./components/pages/ads/PostAds";
-import AdsDetail from "./components/pages/ads/AdsDetail";
+import AdsDetailPage from "./components/pages/ads/adsDetails/AdsDetailPage";
 import Profile from "./components/pages/user/Profile";
 import PublicRoute from "./components/routes/PublicRoute";
 import PrivateRoute from "./components/routes/PrivateRoute";
 import ErrorPage from "./components/global/ErrorPage";
+import BookmarkPage from "./components/pages/bookmark/BookmarkPage";
 
 function App() {
   const router = createBrowserRouter([
@@ -45,7 +46,7 @@ function App() {
         },
         {
           path: "/ads/:id",
-          element: <AdsDetail />,
+          element: <AdsDetailPage />,
         },
         {
           path: "/postAds",
@@ -64,6 +65,14 @@ function App() {
           element: (
             <PrivateRoute>
               <Profile />
+            </PrivateRoute>
+          ),
+        },
+        {
+          path: "/bookmarks",
+          element: (
+            <PrivateRoute>
+              <BookmarkPage />
             </PrivateRoute>
           ),
         },

@@ -7,6 +7,7 @@ const AdsFilter = ({
   selectedCategory,
   setSelectedCategory,
   catFormSearchParams,
+  setCurrentPage,
 }) => {
   const {
     data: allCategories,
@@ -23,12 +24,15 @@ const AdsFilter = ({
   const handleReset = () => {
     setSelectedCategory("");
     setSearchParams("");
+    window.scrollTo(660, 660);
   };
 
   const handleFilter = (e) => {
     const categoryTitle = e.target.value;
     setSelectedCategory(categoryTitle);
+    setCurrentPage(1);
     setSearchParams({ cat: categoryTitle });
+    window.scrollTo(660, 660);
   };
 
   if (isLoading) {

@@ -4,13 +4,11 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:8000" }),
-  tagTypes: ["ads", "category"],
+  tagTypes: ["ads", "category", "bookmark"],
   endpoints: (builder) => ({
     getAds: builder.query({
       query: (arg) => {
         const { cat, queryParams, currentPage: page } = arg;
-
-        console.log(page);
 
         const query = queryParams
           ? JSON.stringify(queryParams).toString()
@@ -98,6 +96,21 @@ export const apiSlice = createApi({
         { type: "category" },
       ],
     }),
+    addToBookmark: builder.mutation({
+      query: ({ userId, adId }) => {
+        console.log(adId);
+        return {
+          url: `/bookmark/${userId}`,
+          method: "PUT",
+          body: { adId },
+        };
+      },
+      invalidatesTags: () => ["bookmark"],
+    }),
+    checkBookmarkStatus: builder.query({
+      query: ({ userId, adId }) => `/bookmark/${userId}/${adId}`,
+      providesTags: (result) => ["bookmark"],
+    }),
   }),
 });
 
@@ -110,4 +123,6 @@ export const {
   useUpdateAdMutation,
   useGetCategoriesQuery,
   useUpdateAdsActiveStatusMutation,
+  useAddToBookmarkMutation,
+  useCheckBookmarkStatusQuery,
 } = apiSlice;

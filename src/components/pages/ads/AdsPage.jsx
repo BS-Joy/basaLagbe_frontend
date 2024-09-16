@@ -65,7 +65,6 @@ const AdsPage = () => {
 
   useEffect(() => {
     // Scroll to the top of the page when the component mounts
-    console.log(currentPage);
     window.scrollTo(200, 200);
   }, []);
 
@@ -78,6 +77,7 @@ const AdsPage = () => {
     setSearchParams("");
     setResetInputFields(true);
     dispatch(setAds(data));
+    setCurrentPage(1);
   };
 
   if (isLoading) {
@@ -110,6 +110,10 @@ const AdsPage = () => {
       );
   }
 
+  const adsPerPage = 5; // Example: 5 ads per page
+  const startCount = (currentPage - 1) * adsPerPage + 1; // Starting index of ads on current page
+  const endCount = Math.min(currentPage * adsPerPage, totalAds);
+
   return (
     <>
       <Hero
@@ -129,6 +133,7 @@ const AdsPage = () => {
         <AdsFilter
           setSelectedCategory={setSelectedCategory}
           selectedCategory={selectedCategory}
+          setCurrentPage={setCurrentPage}
         />
 
         {/* ads list */}
@@ -136,7 +141,11 @@ const AdsPage = () => {
         <div className="w-full">
           {/* total result and sort */}
           <div className="flex justify-between items-center mb-6">
-            <p className="text-[rgb(100,116,139)]">Showing 12 of 15 Ads</p>
+            <p className="text-[rgb(100,116,139)]">
+              {startCount === endCount
+                ? `Showing ${startCount} of ${totalAds} Ads`
+                : `Showing ${startCount} to ${endCount} of ${totalAds} Ads`}
+            </p>
             <div className="flex items-center gap-4">
               {paramsAvailable && (
                 <button

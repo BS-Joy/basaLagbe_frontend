@@ -323,9 +323,9 @@ export default function Navbar() {
 
             {/* Actions */}
             <div className="ml-auto flex items-center justify-end px-6 lg:ml-0 lg:flex-1 lg:p-0">
-              {/* post new ads button */}
               {user?._id && (
                 <>
+                  {/* post new ads button */}
                   <Link
                     to="/postAds"
                     role="menuitem"
@@ -336,12 +336,14 @@ export default function Navbar() {
                   </Link>
 
                   {/* bookmark icon */}
-                  <div className="relative inline-flex h-10 w-10 items-center justify-center rounded-full text-lg text-white">
-                    <IoBookmarksOutline size={"1.5rem"} />
-                    <span className="absolute -top-1.5 -right-1.5 inline-flex items-center justify-center gap-1 rounded-full border-2 border-white bg-pink-500 px-1.5 text-sm text-white">
-                      0<span className="sr-only"> new emails </span>
-                    </span>
-                  </div>
+                  <Link to="/bookmarks">
+                    <div className="relative inline-flex h-10 w-10 items-center justify-center rounded-full text-lg text-white hover:text-slate-300 focus:outline-none focus-visible:outline-none">
+                      <IoBookmarksOutline size={"1.5rem"} />
+                      <span className="absolute -top-1.5 -right-1.5 inline-flex items-center justify-center gap-1 rounded-full border-2 border-white bg-red-500 px-1.5 text-sm text-white">
+                        0
+                      </span>
+                    </div>
+                  </Link>
 
                   {/* user icon */}
                   <button

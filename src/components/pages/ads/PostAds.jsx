@@ -116,7 +116,7 @@ const PostAds = () => {
         navigate(`/ads/${res?._id}`);
       }
     } catch (err) {
-      toast.error(err);
+      toast.error(err?.data?.error);
     }
   };
 

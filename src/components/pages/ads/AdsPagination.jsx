@@ -1,11 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 export default function AdsPagination({
   currentPage,
   setCurrentPage,
   totalAds,
 }) {
+  const [searchParams, setSearchParams] = useSearchParams();
   const totalPages = parseInt(Math.ceil(totalAds / 5));
+
+  const handlePagination = (selectedPage) => {
+    const currentParams = Object.fromEntries([...searchParams]);
+    if (selectedPage > 1) {
+      setSearchParams({ ...currentParams, page: selectedPage });
+      setCurrentPage(selectedPage);
+      window.scrollTo(660, 660);
+    } else {
+      const { page, ...others } = currentParams;
+      setCurrentPage(1);
+      setSearchParams(others);
+      window.scrollTo(660, 660);
+    }
+  };
 
   return (
     <>
@@ -19,8 +35,12 @@ export default function AdsPagination({
           {/* previous button */}
           <li>
             <button
-              aria-label="Goto Page 1"
-              className="inline-flex h-10 items-center justify-center gap-4 stroke-slate-700 px-4 text-sm font-medium text-slate-700 transition duration-300 hover:bg-gray-50 hover:stroke-gray-500 hover:text-gray-500 focus:bg-gray-50 focus:stroke-gray-600 focus:text-gray-600 focus-visible:outline-none"
+              onClick={() => handlePagination(currentPage - 1)}
+              disabled={currentPage === 1}
+              aria-label="Goto Previous Page"
+              className={`inline-flex h-10 items-center justify-center gap-4 stroke-slate-700 px-4 text-sm font-medium text-slate-700 transition duration-300 hover:bg-slate-100 hover:stroke-gray-500 focus:bg-slate-100 focus:stroke-[#34445B] focus:text-[#34445B] focus-visible:outline-none disabled:cursor-not-allowed ${
+                currentPage === 1 ? "" : ""
+              }`}
             >
               <span className="order-2 md:sr-only">Prev</span>
               <svg
@@ -45,24 +65,35 @@ export default function AdsPagination({
           </li>
 
           {/* page numbers */}
-          {[...Array(totalPages).keys()].map((value, index) => (
-            <li key={index}>
-              <button
-                className="hidden h-10 items-center justify-center whitespace-nowrap bg-gray-500 px-4 text-sm font-medium text-white transition duration-300 hover:bg-gray-600 focus:bg-gray-700 focus-visible:outline-none md:inline-flex"
-                aria-label={`Current Page, Page ${index}`}
-                aria-current="true"
-                value={value}
-              >
-                {index + 1}
-              </button>
-            </li>
-          ))}
+          {[...Array(totalPages).keys()].map((value, index) => {
+            // console.log(index);
+            return (
+              <li key={index}>
+                <button
+                  onClick={() => handlePagination(index + 1)}
+                  disabled={currentPage === index + 1}
+                  className={`flex h-10 items-center justify-center whitespace-nowrap  px-4 text-sm font-medium transition duration-300  focus-visible:outline-none md:inline-flex ${
+                    currentPage === index + 1
+                      ? "bg-[#33445B] text-white disabled:cursor-not-allowed"
+                      : "hover:bg-slate-100 focus:bg-[#33445B] focus:text-white hover:text-[#33445B]"
+                  }`}
+                  aria-label={`Current Page, Page ${index + 1}`}
+                  aria-current="true"
+                  value={value}
+                >
+                  {index + 1}
+                </button>
+              </li>
+            );
+          })}
 
           {/* next button */}
           <li>
             <button
-              aria-label="Goto Page 4"
-              className="inline-flex h-10 items-center justify-center gap-4 stroke-slate-700 px-4 text-sm font-medium text-slate-700 transition duration-300 hover:bg-gray-50 hover:stroke-gray-500 hover:text-gray-500 focus:bg-gray-50 focus:stroke-gray-600 focus:text-gray-600 focus-visible:outline-none"
+              onClick={() => handlePagination(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              aria-label="Goto Next Page"
+              className="inline-flex h-10 items-center justify-center gap-4 stroke-slate-700 px-4 text-sm font-medium text-slate-700 transition duration-300 hover:bg-slate-100 hover:stroke-gray-500 hover:text-gray-500 focus:bg-gray-50 focus:stroke-gray-600 focus:text-gray-600 focus-visible:outline-none disabled:cursor-not-allowed"
             >
               <span className="md:sr-only">Next</span>
               <svg

@@ -89,7 +89,7 @@ export default function AdDeleteConfirmationModal({
       }
     } catch (err) {
       setLoading(false);
-      toast.err(err);
+      toast.err(err?.data?.error);
     }
   };
 

@@ -40,10 +40,7 @@ const RecentAdsCarousel = ({ ads }) => {
                 );
               })
             ) : (
-              <EmptyMessage
-                message="No blogs available to show"
-                showBtn={true}
-              />
+              <EmptyMessage message="No Ads available to show" showBtn={true} />
             )}
           </ul>
         </div>
