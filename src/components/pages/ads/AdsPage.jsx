@@ -83,22 +83,7 @@ const AdsPage = () => {
   if (isLoading) {
     allAds = <LoadingAnimation />;
   } else if (isError) {
-    if (error.status === "FETCH_ERROR" || error.status === 500) {
-      allAds = (
-        <ErrorComponent
-          errMessage={
-            error?.status === 500
-              ? error.data.error
-              : "Can't connect to the server"
-          }
-          serverError={true}
-        />
-      );
-    } else {
-      allAds = (
-        <ErrorComponent errMessage={error?.data?.error ?? error?.status} />
-      );
-    }
+    allAds = <ErrorComponent error={error} />;
   } else if (isSuccess) {
     allAds =
       ads?.length > 0 ? (

@@ -38,13 +38,7 @@ const AdsFilter = ({
   if (isLoading) {
     categories = <LoadingAnimation />;
   } else if (isError) {
-    if (error.status === "FETCH_ERROR") {
-      categories = <ErrorComponent errMessage="Can't connect to the server" />;
-    } else {
-      categories = (
-        <ErrorComponent errMessage={error?.data?.error ?? error?.status} />
-      );
-    }
+    categories = <ErrorComponent error={error} />;
   } else if (isSuccess) {
     categories = allCategories.map((cat) => (
       <li key={cat?._id} className="mb-2 flex gap-2 items-center">

@@ -19,13 +19,7 @@ const PopularCategories = () => {
   }
 
   if (isError) {
-    if (error.status === "FETCH_ERROR") {
-      data = <ErrorComponent errMessage="Can't connect to the server" />;
-    } else {
-      data = (
-        <ErrorComponent errMessage={error?.data?.error ?? error?.status} />
-      );
-    }
+    data = <ErrorComponent error={error} />;
   }
 
   if (isSuccess) {

@@ -29,20 +29,8 @@ const AdsByAuthorTable = () => {
 
   if (isLoading) {
     return <LoadingAnimation />;
-  }
-  if (isError) {
-    if (error.status === "FETCH_ERROR") {
-      return (
-        <ErrorComponent
-          errMessage="Can't connect to the server"
-          serverError={true}
-        />
-      );
-    } else {
-      return (
-        <ErrorComponent errMessage={error?.data?.error ?? error?.status} />
-      );
-    }
+  } else if (isError) {
+    return <ErrorComponent error={error} />;
   } else if (isSuccess) {
     adsByAuthor = (
       <AdsByAuthorList

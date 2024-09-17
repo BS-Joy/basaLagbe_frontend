@@ -6,7 +6,6 @@ const BookmarkButton = ({ user, adId, isMobileVersion }) => {
   const [addToBookmark] = useAddToBookmarkMutation();
   // console.log(ad);
   const handleAddToBookmark = () => {
-    console.log(adId);
     try {
       const result = addToBookmark({ userId: user?._id, adId }).unwrap();
       toast.promise(result, {
@@ -15,7 +14,7 @@ const BookmarkButton = ({ user, adId, isMobileVersion }) => {
       });
     } catch (err) {
       console.log({ err });
-      toast.error(err?.data?.error || err.message);
+      toast.error(err?.data?.error || err.message || "something wen wrong");
     }
   };
 

@@ -97,19 +97,28 @@ export const apiSlice = createApi({
       ],
     }),
     addToBookmark: builder.mutation({
-      query: ({ userId, adId }) => {
-        console.log(adId);
-        return {
-          url: `/bookmark/${userId}`,
-          method: "PUT",
-          body: { adId },
-        };
-      },
+      query: ({ userId, adId }) => ({
+        url: `/bookmark/${userId}`,
+        method: "PUT",
+        body: { adId },
+      }),
       invalidatesTags: () => ["bookmark"],
     }),
     checkBookmarkStatus: builder.query({
       query: ({ userId, adId }) => `/bookmark/${userId}/${adId}`,
       providesTags: (result) => ["bookmark"],
+    }),
+    getBookmarksByUser: builder.query({
+      query: (userId) => `/bookmark/${userId}`,
+      providesTags: (result) => ["bookmark"],
+    }),
+    deleteBookmark: builder.mutation({
+      query: ({ userId, adId }) => ({
+        url: `/bookmark/${userId}`,
+        method: "DELETE",
+        body: { adId },
+      }),
+      invalidatesTags: () => ["bookmark"],
     }),
   }),
 });
@@ -125,4 +134,6 @@ export const {
   useUpdateAdsActiveStatusMutation,
   useAddToBookmarkMutation,
   useCheckBookmarkStatusQuery,
+  useGetBookmarksByUserQuery,
+  useDeleteBookmarkMutation,
 } = apiSlice;

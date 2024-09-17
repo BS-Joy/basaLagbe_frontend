@@ -37,14 +37,7 @@ const AdsDetailPage = () => {
   if (isLoading) return <LoadingAnimation />;
 
   if (isError) {
-    console.log(error);
-    if (error.status === "FETCH_ERROR") {
-      return <ErrorComponent errMessage="Can't connect to the server" />;
-    } else {
-      return (
-        <ErrorComponent errMessage={error?.data?.error ?? error?.status} />
-      );
-    }
+    return <ErrorComponent error={error} />;
   }
 
   if (!ad) {

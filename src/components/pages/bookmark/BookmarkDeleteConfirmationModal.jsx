@@ -1,16 +1,20 @@
 import React, { useState, useRef, useEffect } from "react";
 import ReactDOM from "react-dom";
-import { useDeleteAdMutation } from "../../../feature/api/apiSlice";
+import {
+  useDeleteAdMutation,
+  useDeleteBookmarkMutation,
+} from "../../../feature/api/apiSlice";
 import toast from "react-hot-toast";
 
-export default function AdDeleteConfirmationModal({
+export default function BookmarkDeleteConfirmationModal({
   showDeleteModal,
   setShowDeleteModal,
-  toDeleteAdId,
+  toDeleteBookmarkId,
+  userId,
 }) {
-  const wrapperRef = useRef(null);
   const [loading, setLoading] = useState(false);
-  const [deleteAd] = useDeleteAdMutation();
+  const wrapperRef = useRef(null);
+  const [deleteABookmark] = useDeleteBookmarkMutation();
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -78,18 +82,25 @@ export default function AdDeleteConfirmationModal({
     }
   }, [showDeleteModal]);
 
-  const handleDelete = async () => {
+  const handleDelete = () => {
     setLoading(true);
     try {
-      const res = await deleteAd({ adId: toDeleteAdId }).unwrap();
-      if (res?._id) {
-        setLoading(false);
-        setShowDeleteModal(false);
-        toast.success("Ad deleted successfully!");
-      }
-    } catch (err) {
+      const response = deleteABookmark({
+        userId: userId,
+        adId: toDeleteBookmarkId,
+      });
+
+      toast.promise(response, {
+        loading: "Loading..",
+        success: "Removed from bookmark",
+      });
+
+      setShowDeleteModal(false);
       setLoading(false);
-      toast.error(err?.data?.error);
+    } catch (err) {
+      console.log({ err });
+      setLoading(false);
+      toast.error(err?.data?.error || err.message || "something wen wrong");
     }
   };
 

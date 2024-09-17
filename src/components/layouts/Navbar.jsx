@@ -6,6 +6,7 @@ import { FaChevronDown, FaChevronUp } from "react-icons/fa6";
 import { AnimatePresence, easeInOut, motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import { getCurrentUser, logOut } from "../../feature/user/userSlice";
+import { useGetBookmarksByUserQuery } from "../../feature/api/apiSlice";
 
 export default function Navbar() {
   const [isToggleOpen, setIsToggleOpen] = useState(false);
@@ -13,6 +14,8 @@ export default function Navbar() {
   const dropDownRef = useRef(null);
   const dispatch = useDispatch();
   const user = useSelector(getCurrentUser);
+
+  const { data } = useGetBookmarksByUserQuery(user?._id, { skip: !user });
 
   useEffect(() => {
     const handleOutsideClick = (e) => {
@@ -340,7 +343,7 @@ export default function Navbar() {
                     <div className="relative inline-flex h-10 w-10 items-center justify-center rounded-full text-lg text-white hover:text-slate-300 focus:outline-none focus-visible:outline-none">
                       <IoBookmarksOutline size={"1.5rem"} />
                       <span className="absolute -top-1.5 -right-1.5 inline-flex items-center justify-center gap-1 rounded-full border-2 border-white bg-red-500 px-1.5 text-sm text-white">
-                        0
+                        {data?.totalAds || 0}
                       </span>
                     </div>
                   </Link>
