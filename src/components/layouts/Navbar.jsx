@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { IoBookmarksOutline } from "react-icons/io5";
 import { FaRegUserCircle } from "react-icons/fa";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa6";
@@ -7,15 +7,26 @@ import { AnimatePresence, easeInOut, motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import { getCurrentUser, logOut } from "../../feature/user/userSlice";
 import { useGetBookmarksByUserQuery } from "../../feature/api/apiSlice";
+import { navLinks } from "../../utils/navUtils";
 
 export default function Navbar() {
   const [isToggleOpen, setIsToggleOpen] = useState(false);
   const [showDropDown, setShowDropDOwn] = useState(false);
+  const [currentPath, setCurrentPath] = useState("");
   const dropDownRef = useRef(null);
   const dispatch = useDispatch();
   const user = useSelector(getCurrentUser);
 
-  const { data } = useGetBookmarksByUserQuery(user?._id, { skip: !user });
+  const { data, isSuccess } = useGetBookmarksByUserQuery(user?._id, {
+    skip: !user,
+  });
+  let totalBookmarks;
+
+  if (isSuccess) {
+    totalBookmarks = data?.adIds?.filter((ad) => ad.active)?.length;
+  }
+
+  const location = useLocation();
 
   useEffect(() => {
     const handleOutsideClick = (e) => {
@@ -28,6 +39,11 @@ export default function Navbar() {
 
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, []);
+
+  // of: for current path
+  useEffect(() => {
+    setCurrentPath(location.pathname);
+  }, [location.pathname]);
 
   const onClickDropDown = () => {
     setShowDropDOwn(!showDropDown);
@@ -173,7 +189,7 @@ export default function Navbar() {
               Basa Lagbe
             </Link>
 
-            {/*      <!-- Mobile trigger --> */}
+            {/*    Hamburger Mobile trigger */}
             <button
               className={`relative order-10 block h-10 w-10 self-center lg:hidden
                 ${
@@ -202,7 +218,7 @@ export default function Navbar() {
               </div>
             </button>
 
-            {/* mobile nav links     <!-- Navigation links --> */}
+            {/* nav links */}
             <ul
               role="menubar"
               aria-label="Select page"
@@ -212,41 +228,31 @@ export default function Navbar() {
                   : "invisible opacity-0"
               }`}
             >
-              <li role="none" className="flex items-stretch">
-                <Link
-                  onClick={onActionClicks}
-                  to="/"
-                  role="menuitem"
-                  aria-haspopup="false"
-                  className="flex items-center gap-2 py-4 transition-colors duration-300 hover:text-slate-400 focus:text-slate-300 focus:outline-none focus-visible:outline-none lg:px-8"
+              {navLinks?.map((nav, index) => (
+                <li
+                  key={index}
+                  role="none"
+                  className="flex items-stretch box-border"
                 >
-                  <span>Home</span>
-                </Link>
-              </li>
-              <li role="none" className="flex items-stretch">
-                <Link
-                  onClick={onActionClicks}
-                  to="/ads"
-                  role="menuitem"
-                  aria-current="page"
-                  aria-haspopup="false"
-                  className="flex items-center gap-2 py-4 transition-colors duration-300 hover:text-slate-400 focus:text-slate-300 focus:outline-none focus-visible:outline-none lg:px-8"
-                >
-                  <span>Ads</span>
-                </Link>
-              </li>
-              <li role="none" className="flex items-stretch">
-                <Link
-                  onClick={onActionClicks}
-                  to="/contact"
-                  role="menuitem"
-                  aria-haspopup="false"
-                  className="flex items-center gap-2 py-4 transition-colors duration-300 hover:text-slate-400 focus:text-slate-300 focus:outline-none focus-visible:outline-none lg:px-8"
-                >
-                  <span>Contact Us</span>
-                </Link>
-              </li>
+                  <Link
+                    onClick={onActionClicks}
+                    to={nav.path}
+                    role="menuitem"
+                    aria-haspopup="false"
+                    className={`flex items-center gap-2 py-4 transition-colors duration-300 hover:text-slate-400 hover:border-b-2 hover:border-b-red-500 focus:text-slate-400 focus:outline-none focus-visible:outline-none lg:px-8 ${
+                      currentPath === nav.path &&
+                      "text-slate-400 border-b-2 border-b-orange-600"
+                    }`}
+                    style={
+                      currentPath === nav?.path ? { pointerEvents: "none" } : {}
+                    }
+                  >
+                    <span>{nav?.label}</span>
+                  </Link>
+                </li>
+              ))}
 
+              {/* nav links for mobile view */}
               {user?._id ? (
                 <>
                   {/* mobile post new ads */}
@@ -256,7 +262,15 @@ export default function Navbar() {
                       to="/postAds"
                       role="menuitem"
                       aria-haspopup="false"
-                      className="flex items-center gap-2 py-4 transition-colors duration-300 hover:text-slate-400 focus:text-slate-300 focus:outline-none focus-visible:outline-none lg:px-8 lg:hidden"
+                      className={`flex items-center gap-2 py-4 transition-colors duration-300 hover:text-slate-400 focus:text-slate-300 focus:outline-none focus-visible:outline-none lg:px-8 lg:hidden ${
+                        currentPath === "/postAds" &&
+                        "text-slate-400 border-b-2 border-b-orange-600"
+                      }`}
+                      style={
+                        currentPath === "/postAds"
+                          ? { pointerEvents: "none" }
+                          : {}
+                      }
                     >
                       <span>Post New Ads</span>
                     </Link>
@@ -269,7 +283,15 @@ export default function Navbar() {
                       to="/profile"
                       role="menuitem"
                       aria-haspopup="false"
-                      className="flex items-center gap-2 py-4 transition-colors duration-300 hover:text-slate-400 focus:text-slate-300 focus:outline-none focus-visible:outline-none lg:px-8 lg:hidden"
+                      className={`flex items-center gap-2 py-4 transition-colors duration-300 hover:text-slate-400 focus:text-slate-300 focus:outline-none focus-visible:outline-none lg:px-8 lg:hidden ${
+                        currentPath === "/profile" &&
+                        "text-slate-400 border-b-2 border-b-orange-600"
+                      }`}
+                      style={
+                        currentPath === "/profile"
+                          ? { pointerEvents: "none" }
+                          : {}
+                      }
                     >
                       <span>{user?.username}</span>
                     </Link>
@@ -324,7 +346,7 @@ export default function Navbar() {
               )}
             </ul>
 
-            {/* Actions */}
+            {/* navbar right sides action links */}
             <div className="ml-auto flex items-center justify-end px-6 lg:ml-0 lg:flex-1 lg:p-0">
               {user?._id && (
                 <>
@@ -333,17 +355,28 @@ export default function Navbar() {
                     to="/postAds"
                     role="menuitem"
                     aria-haspopup="false"
-                    className="lg:flex items-center gap-2 py-4 transition-colors duration-300 hover:text-slate-400 focus:text-slate-300 focus:outline-none focus-visible:outline-none lg:px-2 hidden"
+                    className={`lg:flex items-center gap-2 py-4 transition-colors duration-300 hover:text-slate-400 focus:text-slate-300 focus:outline-none focus-visible:outline-none lg:px-2 hidden ${
+                      currentPath === "/postAds" && "text-slate-300"
+                    }`}
+                    style={
+                      currentPath === "/postAds"
+                        ? { pointerEvents: "none" }
+                        : {}
+                    }
                   >
                     <span>Post New Ads</span>
                   </Link>
 
                   {/* bookmark icon */}
                   <Link to="/bookmarks">
-                    <div className="relative inline-flex h-10 w-10 items-center justify-center rounded-full text-lg text-white hover:text-slate-300 focus:outline-none focus-visible:outline-none">
+                    <div
+                      className={`relative inline-flex h-10 w-10 items-center justify-center rounded-full text-lg text-white hover:text-slate-300 focus:outline-none focus-visible:outline-none ${
+                        currentPath === "/bookmarks" && "text-slate-300"
+                      }`}
+                    >
                       <IoBookmarksOutline size={"1.5rem"} />
                       <span className="absolute -top-1.5 -right-1.5 inline-flex items-center justify-center gap-1 rounded-full border-2 border-white bg-red-500 px-1.5 text-sm text-white">
-                        {data?.totalAds || 0}
+                        {totalBookmarks || 0}
                       </span>
                     </div>
                   </Link>
@@ -400,7 +433,7 @@ export default function Navbar() {
                 </>
               )}
 
-              {!user?._id ? (
+              {!user?._id && (
                 <>
                   {/* log in */}
                   <Link
@@ -422,8 +455,6 @@ export default function Navbar() {
                     <span>Sign Up</span>
                   </Link>
                 </>
-              ) : (
-                ""
               )}
             </div>
           </nav>

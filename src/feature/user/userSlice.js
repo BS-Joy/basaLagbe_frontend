@@ -1,13 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const baseUrl = "http://localhost:8000/user";
+const baseUrl = `${import.meta.env.VITE_API_BASE_URL}`;
 
 export const signUpUser = createAsyncThunk(
   "/signUp",
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${baseUrl}`, userData);
+      const response = await axios.post(`${baseUrl}/user`, userData);
 
       return response.data;
     } catch (err) {
@@ -21,18 +21,13 @@ export const logInUser = createAsyncThunk(
   "/login",
   async (credentials, { rejectWithValue }) => {
     try {
-      const resposne = await axios.post(`${baseUrl}/login`, credentials);
+      const resposne = await axios.post(`${baseUrl}/user/login`, credentials);
       return resposne.data;
     } catch (err) {
       return rejectWithValue(err?.response?.data?.error || err?.message);
     }
   }
 );
-
-export const fetchAllUSers = createAsyncThunk("user/getUsers", async () => {
-  const response = await axios.get(`${baseUrl}/user`);
-  console.log(response);
-});
 
 const initialState = {
   currentUser: JSON.parse(localStorage.getItem("auth")) || null,

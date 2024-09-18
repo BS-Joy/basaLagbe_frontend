@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 
 const BookmarkButton = ({ user, adId, isMobileVersion }) => {
   const [addToBookmark] = useAddToBookmarkMutation();
-  // console.log(ad);
+
   const handleAddToBookmark = () => {
     try {
       const result = addToBookmark({ userId: user?._id, adId }).unwrap();

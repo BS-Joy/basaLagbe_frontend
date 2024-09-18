@@ -35,15 +35,11 @@ const adsSlice = createSlice({
           break;
       }
     },
-    setTotalBookmarkedAds: (state, action) => {
-      state.totalBookmarkedAds = action.payload;
-    },
   },
 });
 
 export const getAdsSelector = (state) => state.ads.ads;
-export const getTotalBookmarkedAds = (state) => state.ads.totalBookmarkedAds;
 
-export const { setAds, sortAds, setTotalBookmarkedAds } = adsSlice.actions;
+export const { setAds, sortAds } = adsSlice.actions;
 
 export default adsSlice.reducer;

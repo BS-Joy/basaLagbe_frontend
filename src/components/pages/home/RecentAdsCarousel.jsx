@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import Glide from "@glidejs/glide";
 import AdsCard from "../ads/AdsCard";
 import EmptyMessage from "../../global/EmptyMessage";
+import { Link } from "react-router-dom";
 
 const RecentAdsCarousel = ({ ads }) => {
   useEffect(() => {
@@ -40,12 +41,22 @@ const RecentAdsCarousel = ({ ads }) => {
                 );
               })
             ) : (
-              <EmptyMessage message="No Ads available to show" showBtn={true} />
+              <div className="flex justify-center">
+                <p>
+                  No recent ads{" "}
+                  <Link
+                    className="text-blue-400 underline hover:text-blue-500"
+                    to="/ads"
+                  >
+                    explore old ads
+                  </Link>
+                </p>
+              </div>
             )}
           </ul>
         </div>
         {/*    <!-- Controls --> */}
-        {ads?.length > 1 ? (
+        {ads?.length > 1 && (
           <div
             className="flex items-center justify-center w-full gap-2 p-4"
             data-glide-el="controls"
@@ -93,8 +104,6 @@ const RecentAdsCarousel = ({ ads }) => {
               </svg>
             </button>
           </div>
-        ) : (
-          ""
         )}
       </div>
       {/*<!-- End Slider with controls outside --> */}

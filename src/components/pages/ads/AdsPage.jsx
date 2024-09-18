@@ -165,11 +165,13 @@ const AdsPage = () => {
           {/* all ads */}
           <div className="flex flex-col gap-10">{allAds}</div>
           <div className="flex justify-center my-6">
-            <AdsPagination
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-              totalAds={totalAds}
-            />
+            {ads?.length > 0 && (
+              <AdsPagination
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                totalAds={totalAds}
+              />
+            )}
           </div>
         </div>
       </div>
