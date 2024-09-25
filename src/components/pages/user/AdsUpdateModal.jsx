@@ -110,6 +110,7 @@ export default function AdsUpdateModal({
     }
   }, [isShowing]);
 
+  // of: handlechange
   const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -118,6 +119,12 @@ export default function AdsUpdateModal({
       setSelectedAd({
         ...selectedAd,
         contact: { ...selectedAd.contact, [name]: value },
+      });
+    } else if (name === "availableForm") {
+      setSelectedAd({
+        ...selectedAd,
+        [name]: value,
+        isUpdatingAvailableForm: true,
       });
     } else {
       setSelectedAd({ ...selectedAd, [name]: value });
@@ -137,6 +144,7 @@ export default function AdsUpdateModal({
         toast.success("Ad updated successfully");
       }
     } catch (err) {
+      console.log(err);
       setLoading(false);
       toast.error(err?.data?.error);
     }
@@ -363,9 +371,7 @@ export default function AdsUpdateModal({
                           className="mt-1 p-2 outline-none focus:border-black w-full border rounded-sm"
                           value={selectedAd?.availableForm}
                         >
-                          <option defaultValue="Select Month">
-                            Select Month
-                          </option>
+                          <option value="Select Month">Select Month</option>
                           {upCommingMonths.map((month, index) => (
                             <option key={index} value={month}>
                               {month}

@@ -98,6 +98,15 @@ const AdsPage = () => {
   const adsPerPage = 5; // Example: 5 ads per page
   const startCount = (currentPage - 1) * adsPerPage + 1; // Starting index of ads on current page
   const endCount = Math.min(currentPage * adsPerPage, totalAds);
+  let totalResults;
+
+  if (totalAds < 1) {
+    totalResults = "Showing 0 Ads";
+  } else if (startCount === endCount) {
+    totalResults = `Showing ${startCount} of ${totalAds} Ads`;
+  } else {
+    totalResults = `Showing ${startCount} to ${endCount} of ${totalAds} Ads`;
+  }
 
   return (
     <>
@@ -126,11 +135,7 @@ const AdsPage = () => {
         <div className="w-full">
           {/* total result and sort */}
           <div className="flex justify-between items-center mb-6">
-            <p className="text-[rgb(100,116,139)]">
-              {startCount === endCount
-                ? `Showing ${startCount} of ${totalAds} Ads`
-                : `Showing ${startCount} to ${endCount} of ${totalAds} Ads`}
-            </p>
+            <p className="text-[rgb(100,116,139)]">{totalResults}</p>
             <div className="flex items-center gap-4">
               {paramsAvailable && (
                 <button

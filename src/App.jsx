@@ -7,7 +7,7 @@ import SignUp from "./components/pages/user/SignUp";
 import LogIn from "./components/pages/user/LogIn";
 import PostAds from "./components/pages/ads/PostAds";
 import AdsDetailPage from "./components/pages/ads/adsDetails/AdsDetailPage";
-import Profile from "./components/pages/user/Profile";
+import ProfilePage from "./components/pages/user/ProfilePage";
 import PublicRoute from "./components/routes/PublicRoute";
 import PrivateRoute from "./components/routes/PrivateRoute";
 import ErrorPage from "./components/global/ErrorPage";
@@ -64,7 +64,7 @@ function App() {
           path: "/profile",
           element: (
             <PrivateRoute>
-              <Profile />
+              <ProfilePage />
             </PrivateRoute>
           ),
         },

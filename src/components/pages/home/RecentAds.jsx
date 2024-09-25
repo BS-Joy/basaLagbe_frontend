@@ -1,24 +1,23 @@
-import { useGetAdsQuery } from "../../../feature/api/apiSlice";
 import RecentAdsCarousel from "./RecentAdsCarousel";
 import LoadingAnimation from "../../LoadingAnimation";
 import ErrorComponent from "../../global/ErrorComponent";
+import { useGetRecentAdsQuery } from "../../../feature/api/apiSlice";
 
 const RecentAds = () => {
   const {
     data: ads,
+    isLoading,
     isSuccess,
     isError,
-    isLoading,
     error,
-  } = useGetAdsQuery({
-    cat: null,
-  });
+  } = useGetRecentAdsQuery();
 
   let recent;
 
   if (isLoading) {
     recent = <LoadingAnimation />;
   } else if (isError) {
+    console.log(error);
     recent = <ErrorComponent error={error} />;
   } else if (isSuccess) {
     recent = <RecentAdsCarousel ads={ads} />;

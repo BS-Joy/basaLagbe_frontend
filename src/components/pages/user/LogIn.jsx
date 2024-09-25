@@ -28,8 +28,8 @@ const LogIn = () => {
     setSetFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Scroll to the top of the page when the component mounts
   useEffect(() => {
-    // Scroll to the top of the page when the component mounts
     window.scrollTo(0, 0);
 
     return () => {
@@ -46,6 +46,7 @@ const LogIn = () => {
       };
       await dispatch(logInUser(data)).unwrap();
     } catch (err) {
+      console.log(err);
       throw new Error(err);
     }
   };

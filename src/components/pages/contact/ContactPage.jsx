@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+// import Cloudinary from "./Cloudinary";
 
 const ContactPage = () => {
   useEffect(() => {
@@ -21,7 +22,6 @@ const ContactPage = () => {
         <div className="lg:w-1/2 md:w-2/3 mx-auto">
           <div className="flex flex-wrap -m-2">
             <div className="p-2 w-1/2">
-              
               {/* name */}
               <div className="relative">
                 <label
@@ -147,6 +147,7 @@ const ContactPage = () => {
           </div>
         </div>
       </div>
+      {/* <Cloudinary /> */}
     </section>
   );
 };

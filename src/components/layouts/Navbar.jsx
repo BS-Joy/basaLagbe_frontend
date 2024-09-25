@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCurrentUser, logOut } from "../../feature/user/userSlice";
 import { useGetBookmarksByUserQuery } from "../../feature/api/apiSlice";
 import { navLinks } from "../../utils/navUtils";
+import DarkModeToggle from "./DarkModeToggle";
 
 export default function Navbar() {
   const [isToggleOpen, setIsToggleOpen] = useState(false);
@@ -366,6 +367,8 @@ export default function Navbar() {
                   >
                     <span>Post New Ads</span>
                   </Link>
+
+                  {/* <DarkModeToggle /> */}
 
                   {/* bookmark icon */}
                   <Link to="/bookmarks">

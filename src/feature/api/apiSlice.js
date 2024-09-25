@@ -26,6 +26,9 @@ export const apiSlice = createApi({
             ]
           : [{ type: "ads", id: "LIST" }],
     }),
+    getRecentAds: builder.query({
+      query: () => "/ads/recentAds",
+    }),
     postAds: builder.mutation({
       query: (newAd) => ({
         url: "/ads",
@@ -127,6 +130,7 @@ export const apiSlice = createApi({
 export const {
   usePostAdsMutation,
   useGetAdsQuery,
+  useGetRecentAdsQuery,
   useGetAdsByAuthorQuery,
   useGetAdsByIdQuery,
   useDeleteAdMutation,

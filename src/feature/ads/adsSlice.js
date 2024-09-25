@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, original } from "@reduxjs/toolkit";
 
 const initialState = {
   ads: [],
@@ -31,7 +31,7 @@ const adsSlice = createSlice({
           state.ads = sortedAds;
           break;
         default:
-          state.ads = originalState; // No sorting, default order
+          state.ads = originalState?.data; // No sorting, default order
           break;
       }
     },

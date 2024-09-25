@@ -24,6 +24,7 @@ const AdsByAuthorList = ({
         phone: ad?.contact?.phone,
         whatsapp: ad?.contact?.whatsapp,
       },
+      isUpdatingAvailableForm: false,
     };
     setSelectedAd(a);
   };

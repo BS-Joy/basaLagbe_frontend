@@ -11,7 +11,6 @@ export const signUpUser = createAsyncThunk(
 
       return response.data;
     } catch (err) {
-      console.log(err);
       return rejectWithValue(err?.response?.data?.error || err?.message);
     }
   }
@@ -22,7 +21,23 @@ export const logInUser = createAsyncThunk(
   async (credentials, { rejectWithValue }) => {
     try {
       const resposne = await axios.post(`${baseUrl}/user/login`, credentials);
+
       return resposne.data;
+    } catch (err) {
+      return rejectWithValue(err?.response?.data?.error || err?.message);
+    }
+  }
+);
+
+export const updateUser = createAsyncThunk(
+  "/updateUser",
+  async ({ userData, userId }, { rejectWithValue }) => {
+    try {
+      const response = await axios.patch(
+        `${baseUrl}/user/updateUser/${userId}`,
+        userData
+      );
+      return response.data;
     } catch (err) {
       return rejectWithValue(err?.response?.data?.error || err?.message);
     }
@@ -62,7 +77,7 @@ const userSlice = createSlice({
         state.status = "failed";
         state.error = action.payload;
       })
-      // signup
+      // of: signup
       .addCase(signUpUser.pending, (state, action) => {
         state.status = "loading";
       })
@@ -70,6 +85,19 @@ const userSlice = createSlice({
         state.status = "succeeded";
       })
       .addCase(signUpUser.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      })
+      // of: updateUser
+      .addCase(updateUser.pending, (state, action) => {
+        state.status = "loading";
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.currentUser = action.payload;
+        localStorage.setItem("auth", JSON.stringify(action.payload));
+      })
+      .addCase(updateUser.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
       });
