@@ -9,13 +9,14 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { getCurrentUser } from "../../../feature/user/userSlice";
 import toast from "react-hot-toast";
-import { IoCloseCircleSharp } from "react-icons/io5";
+import ImageUploadField from "../../ImageUploadField";
 
 const PostAds = () => {
   const [state, dispatch] = useReducer(postAdsReducer, initialState);
   const [images, setImages] = useState();
   const [districtLists, setDistrictLists] = useState([]);
   const [areaLists, setAreaLists] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -39,7 +40,7 @@ const PostAds = () => {
   } else if (isSuccess) {
     categories = (
       <>
-        <option defaultValue="Select Your Division">Select Category</option>
+        <option value="">Select Category</option>
         {allCategories.map((cat) => (
           <option key={cat?._id} value={cat?._id}>
             {cat?.title}
@@ -49,17 +50,7 @@ const PostAds = () => {
     );
   }
 
-  // of: handle title
-  const getTitle = (e) => {
-    dispatch({ type: "addTitle", payload: e.target.value });
-  };
-
-  // of: handle description
-  const getDesc = (e) => {
-    dispatch({ type: "addDescription", payload: e.target.value });
-  };
-
-  // of: handle district
+  //  handle district
   const districtHandle = (e) => {
     const div = e.target.value;
     dispatch({ type: "addDivision", payload: div });
@@ -73,11 +64,6 @@ const PostAds = () => {
     setAreaLists(bdAreas[state.division][dist]);
   };
 
-  // of: get area
-  const getArea = (e) => {
-    dispatch({ type: "addArea", payload: e.target.value });
-  };
-
   // of: handle flat data input
   const inputHandle = (e) => {
     dispatch({
@@ -86,8 +72,26 @@ const PostAds = () => {
     });
   };
 
+  // of: handle image upload
+  const handleImages = (e) => {
+    const filesArray = Array.from(e.target.files).map((file) =>
+      URL.createObjectURL(file)
+    );
+    setImages(filesArray);
+    dispatch({ type: "addImages", payload: e.target.files });
+  };
+
+  // of: handle selected images
+  const handleSelectedImage = (img) => {
+    const imgIndex = images.indexOf(img);
+    const allImages = state.images;
+    delete allImages[imgIndex];
+    const newImages = images.filter((i) => i !== img);
+    setImages(newImages);
+  };
+
   // of: submit form handle
-  const submitHandle = async (e) => {
+  const submitHandle = (e) => {
     e.preventDefault();
 
     // Create a FormData instance
@@ -107,7 +111,7 @@ const PostAds = () => {
     formData.append("bathroom", state.flatData.bathroom);
     formData.append("availableForm", state.flatData.availableForm);
     formData.append("contact[phone]", state.flatData.phone);
-    formData.append("contact[whatsapp]", state.flatData.whatsapp);
+    formData.append("contact[whatsapp]", state.flatData.whatsapp || "");
     formData.append("address", state.flatData.address);
 
     // Append images (if it's an array of files)
@@ -118,13 +122,16 @@ const PostAds = () => {
     }
 
     try {
-      const res = await postAds(formData).unwrap();
-
-      if (res?._id) {
-        e.target.reset();
-        toast.success("Ads posted successfully");
-        navigate(`/ads/${res?._id}`);
-      }
+      setLoading(true);
+      const res = postAds(formData).unwrap();
+      toast.promise(res, {
+        loading: "Creating ad...",
+        success: (res) => {
+          e.target.reset();
+          navigate(`/ads/${res?._id}`);
+          return "Ad posted successfully.";
+        },
+      });
     } catch (err) {
       toast.error(err?.data?.error);
     }
@@ -151,7 +158,9 @@ const PostAds = () => {
             Title
           </label>
           <input
-            onChange={getTitle}
+            onChange={(e) =>
+              dispatch({ type: "addTitle", payload: e.target.value })
+            }
             required
             type="text"
             id="title"
@@ -171,7 +180,9 @@ const PostAds = () => {
             Description
           </label>
           <textarea
-            onChange={getDesc}
+            onChange={(e) =>
+              dispatch({ type: "addDescription", payload: e.target.value })
+            }
             required
             id="description"
             name="description"
@@ -199,9 +210,7 @@ const PostAds = () => {
               className="mt-1 p-2 outline-none focus:border-black w-full border rounded-sm"
               value={state.division}
             >
-              <option defaultValue="Select Your Division">
-                Select Division
-              </option>
+              <option value="">Select Division</option>
               <option value="Dhaka">Dhaka</option>
               <option value="Barishal">Barishal</option>
               <option value="Khulna">Khulna</option>
@@ -222,19 +231,14 @@ const PostAds = () => {
               District
             </label>
             <select
+              required
               onChange={areaHandle}
               id="district"
               name="district"
               className="mt-1 p-2 outline-none focus:border-black w-full border rounded-sm"
               value={state.district}
             >
-              <option
-                defaultValue={
-                  districtLists?.length > 0
-                    ? "Select District"
-                    : "Select Division First"
-                }
-              >
+              <option value="">
                 {districtLists?.length > 0
                   ? "Select District"
                   : "Select Division First"}
@@ -258,19 +262,16 @@ const PostAds = () => {
               Area
             </label>
             <select
-              onChange={getArea}
+              required
+              onChange={(e) =>
+                dispatch({ type: "addArea", payload: e.target.value })
+              }
               id="area"
               name="area"
               className="mt-1 p-2 outline-none focus:border-black w-full border rounded-sm"
               value={state.area}
             >
-              <option
-                defaultValue={
-                  areaLists?.length > 0
-                    ? "Select Area"
-                    : "Select District First"
-                }
-              >
+              <option value="">
                 {areaLists?.length > 0
                   ? "Select Area"
                   : "Select District First"}
@@ -319,6 +320,7 @@ const PostAds = () => {
               Rent
             </label>
             <input
+              required
               onChange={inputHandle}
               type="number"
               id="rent"
@@ -337,6 +339,7 @@ const PostAds = () => {
               Floor
             </label>
             <input
+              required
               onChange={inputHandle}
               type="number"
               id="floor"
@@ -355,6 +358,7 @@ const PostAds = () => {
               Bedroom
             </label>
             <input
+              required
               onChange={inputHandle}
               type="number"
               id="bedroom"
@@ -373,6 +377,7 @@ const PostAds = () => {
               Bathroom
             </label>
             <input
+              required
               onChange={inputHandle}
               type="number"
               id="bathroom"
@@ -398,7 +403,7 @@ const PostAds = () => {
               className="mt-1 p-2 outline-none focus:border-black w-full border rounded-sm"
               value={state.flatData.availableForm}
             >
-              <option defaultValue="Select Month">Select Month</option>
+              <option value="">Select Month</option>
               {upCommingMonths.map((month, index) => (
                 <option key={index} value={month}>
                   {month}
@@ -416,6 +421,7 @@ const PostAds = () => {
               Phone
             </label>
             <input
+              required
               onChange={inputHandle}
               type="text"
               id="phone"
@@ -453,6 +459,7 @@ const PostAds = () => {
             Address
           </label>
           <textarea
+            required
             onChange={inputHandle}
             id="address"
             name="address"
@@ -462,87 +469,20 @@ const PostAds = () => {
         </div>
 
         {/* upload images */}
-        <div className="relative my-6">
-          <p className="block text-sm font-medium text-gray-600 pb-2">
-            Upload Images
-          </p>
-          <input
-            id="id-dropzone01"
-            name="images"
-            type="file"
-            className="hidden"
-            multiple
-            accept="image/*"
-            onChange={(e) => {
-              const filesArray = Array.from(e.target.files).map((file) =>
-                URL.createObjectURL(file)
-              );
-              setImages(filesArray);
-              dispatch({ type: "addImages", payload: e.target.files });
-            }}
-          />
-          <label
-            htmlFor="id-dropzone01"
-            className="relative flex cursor-pointer flex-col items-center gap-4 rounded border border-dashed border-slate-300 px-3 py-6 text-center text-sm font-medium transition-colors"
-          >
-            <span className="inline-flex h-12 items-center justify-center self-center rounded-full bg-slate-100/70 px-3 text-slate-400">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                aria-label="File input icon"
-                role="graphics-symbol"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                className="h-6 w-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 16.5V9.75m0 0 3 3m-3-3-3 3M6.75 19.5a4.5 4.5 0 0 1-1.41-8.775 5.25 5.25 0 0 1 10.233-2.33 3 3 0 0 1 3.758 3.848A3.752 3.752 0 0 1 18 19.5H6.75Z"
-                />
-              </svg>
-            </span>
-            <span className="text-slate-500">
-              Drag & drop or
-              <span className="text-gray-500"> click to upload</span>
-            </span>
-          </label>
-        </div>
-        <div className="flex gap-4 my-6">
-          {images &&
-            images.map((img, index) => (
-              <div key={index} className="relative">
-                <img
-                  className="w-28 h-28 border rounded z-30"
-                  src={img}
-                  alt="selected_images"
-                />
-                <span
-                  onClick={() => {
-                    const imgIndex = images.indexOf(img);
-                    const allImages = { ...state.images };
-                    // console.log("before delete: ", allImages);
-                    delete allImages[imgIndex];
-                    dispatch({ type: "addImages", payload: allImages });
-                    const newImages = images.filter((i) => i !== img);
-                    setImages(newImages);
-                  }}
-                  className="text-xl absolute -top-3 -right-4 rounded-full cursor-pointer"
-                >
-                  <IoCloseCircleSharp />
-                </span>
-              </div>
-            ))}
-        </div>
+        <ImageUploadField
+          onChangeHandle={handleImages}
+          handleSelectedImage={handleSelectedImage}
+          selectedImages={images}
+        />
 
         {/* Post Button */}
         <div className="mb-4">
           <button
+            disabled={loading === true ? true : false}
             type="submit"
             className="w-full bg-slate-600 hover:bg-slate-700 text-white p-2 rounded-md"
           >
-            Post
+            {loading === true ? "Posting..." : "Post"}
           </button>
         </div>
       </form>

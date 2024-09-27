@@ -3,10 +3,13 @@ import { useCheckBookmarkStatusQuery } from "../feature/api/apiSlice";
 
 const UseGetBookmarkStatus = (ad, user) => {
   const [isBookmarked, setIsBookmarked] = useState(false);
-  const { data, status } = useCheckBookmarkStatusQuery({
-    userId: user?._id,
-    adId: ad?._id,
-  });
+  const { data, status } = useCheckBookmarkStatusQuery(
+    {
+      userId: user?._id,
+      adId: ad?._id,
+    },
+    { skip: !user }
+  );
 
   useEffect(() => {
     if (status === "fulfilled") {

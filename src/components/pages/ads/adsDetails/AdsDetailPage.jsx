@@ -66,7 +66,7 @@ const AdsDetailPage = () => {
       )}
       <div className="flex flex-col rounded text-slate-500">
         {/* ad image section */}
-        <AdDetailThumbnail />
+        <AdDetailThumbnail adThumbnail={ad?.thumbnail} adImages={ad?.images} />
 
         <div className="flex-1 gap-y-4 py-6 sm:px-0">
           {/* ad details informations section */}

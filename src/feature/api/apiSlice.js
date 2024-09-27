@@ -67,6 +67,7 @@ export const apiSlice = createApi({
         method: "DELETE",
       }),
       invalidatesTags: (result, error, arg) => [
+        { type: "ads", id: "LIST" },
         { type: "ads", id: arg?.adId },
         { type: "category" },
       ],

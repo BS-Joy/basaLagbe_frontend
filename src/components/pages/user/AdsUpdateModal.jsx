@@ -6,6 +6,7 @@ import {
   useUpdateAdMutation,
 } from "../../../feature/api/apiSlice";
 import toast from "react-hot-toast";
+import ImageUploadField from "../../ImageUploadField";
 
 export default function AdsUpdateModal({
   isShowing,
@@ -418,23 +419,6 @@ export default function AdsUpdateModal({
                         />
                       </div>
                     </div>
-
-                    {/* Address */}
-                    {/* <div className="mb-4">
-                      <label
-                        htmlFor="address"
-                        className="block text-sm font-medium text-gray-600"
-                      >
-                        Address
-                      </label>
-                      <textarea
-                        // onChange={inputHandle}
-                        id="address"
-                        name="address"
-                        className="mt-1 p-2 outline-none focus:border-black w-full border rounded-sm"
-                        placeholder="Enter detailed address"
-                      ></textarea>
-                    </div> */}
 
                     {/* Post Button */}
                     <div className="mb-4">

@@ -6,6 +6,7 @@ import { IoLogoWhatsapp } from "react-icons/io";
 import { BsInfoSquare } from "react-icons/bs";
 import { MdOutlinePhoneIphone } from "react-icons/md";
 import UseGetBookmarkStatus from "../../../../hooks/useGetBookmarkStatus";
+import { Link } from "react-router-dom";
 
 const DetailInfoSection = ({ ad, user }) => {
   const isBookmarked = UseGetBookmarkStatus(ad, user);
@@ -82,7 +83,7 @@ const DetailInfoSection = ({ ad, user }) => {
                 </p>
                 <p className="flex items-center gap-1">
                   <IoLogoWhatsapp color="green" />: &nbsp;
-                  {ad.contact.whatsapp}
+                  {ad.contact.whatsapp || "Not Available"}
                 </p>
               </div>
             ) : (

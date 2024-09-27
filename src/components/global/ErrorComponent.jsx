@@ -2,11 +2,23 @@ import error404 from "../../assets/404error.png";
 import error503 from "../../assets/503Error.png";
 
 const ErrorComponent = ({ error }) => {
+  console.log(error);
   let serverError = false;
   let errMessage;
-  if (error.status === "FETCH_ERROR" || error.status === 500) {
-    errMessage =
-      error?.status === 500 ? error.data.error : "Can't connect to the server";
+  if (
+    error.status === "FETCH_ERROR" ||
+    error.status === 500 ||
+    error.status === 408
+  ) {
+    if (error.status === 408) {
+      errMessage = error.data.error;
+    } else {
+      errMessage =
+        error?.status === 500
+          ? error.data.error
+          : "Can't connect to the server";
+    }
+
     serverError = true;
   } else {
     errMessage = error?.data?.error ?? error?.status;

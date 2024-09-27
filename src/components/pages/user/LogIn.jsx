@@ -46,7 +46,6 @@ const LogIn = () => {
       };
       await dispatch(logInUser(data)).unwrap();
     } catch (err) {
-      console.log(err);
       throw new Error(err);
     }
   };

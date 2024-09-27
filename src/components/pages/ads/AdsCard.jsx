@@ -4,17 +4,20 @@ import { TbBed } from "react-icons/tb";
 import { PiBathtub } from "react-icons/pi";
 import { Link } from "react-router-dom";
 
+const defaultImageUrl =
+  "https://images.unsplash.com/photo-1515263487990-61b07816b324?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+
 export default function AdsCard({ ad }) {
   return (
     <>
       {/*<!-- Component: Horizontal card--> */}
-      <div className="flex flex-col overflow-hidden bg-white rounded shadow-md text-slate-500 shadow-slate-200 sm:flex-row">
+      <div className="flex flex-col overflow-hidden bg-white rounded shadow-md text-slate-500 shadow-slate-200 sm:flex-row border">
         {/*  <!-- Image --> */}
         <figure className="flex-1 p-2">
           <img
-            src="https://images.unsplash.com/photo-1515263487990-61b07816b324?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            src={ad?.images ? ad?.images[0]?.url : defaultImageUrl}
             alt="card image"
-            className="object-cover min-h-full aspect-auto rounded"
+            className="object-fill min-h-full aspect-auto rounded border"
           />
         </figure>
         {/*  <!-- Body--> */}
