@@ -25,7 +25,14 @@ const AdsByAuthorList = ({
         whatsapp: ad?.contact?.whatsapp,
       },
       isUpdatingAvailableForm: false,
+      thumbnail: ad?.thumbnail,
+      images: ad?.images,
+      allImages: [ad?.thumbnail, ...ad?.images],
+      isUpdatingImages: false,
+      newImages: [],
+      deletedImages: [],
     };
+
     setSelectedAd(a);
   };
 

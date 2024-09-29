@@ -2,17 +2,22 @@ import { BsBookmarkPlus } from "react-icons/bs";
 import { useAddToBookmarkMutation } from "../../../../feature/api/apiSlice";
 import toast from "react-hot-toast";
 
-const BookmarkButton = ({ user, adId, isMobileVersion }) => {
+const BookmarkButton = ({ user, adId, isMobileVersion, setLoading }) => {
   const [addToBookmark] = useAddToBookmarkMutation();
 
   const handleAddToBookmark = () => {
     try {
+      setLoading(true);
       const result = addToBookmark({ userId: user?._id, adId }).unwrap();
       toast.promise(result, {
         loading: "Loading...",
-        success: "Bookmark added successfully",
+        success: (res) => {
+          setLoading(false);
+          return "Bookmark added successfully";
+        },
       });
     } catch (err) {
+      setLoading(false);
       console.log({ err });
       toast.error(err?.data?.error || err.message || "something wen wrong");
     }

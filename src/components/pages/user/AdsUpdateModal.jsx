@@ -7,6 +7,7 @@ import {
 } from "../../../feature/api/apiSlice";
 import toast from "react-hot-toast";
 import ImageUploadField from "../../ImageUploadField";
+import SmallLoadingAnimation from "../../SmallLoadingAnimation";
 
 export default function AdsUpdateModal({
   isShowing,
@@ -111,6 +112,41 @@ export default function AdsUpdateModal({
     }
   }, [isShowing]);
 
+  // of: handle remove seleted image
+  const handleSelectedImages = (img) => {
+    const a = { ...selectedAd };
+    if (a?.isUpdatingImages === false) a.isUpdatingImages = true;
+
+    if (img?.public_id) {
+      a.deletedImages = [...a.deletedImages, img?.public_id];
+      a.allImages = a.allImages.filter((i) => i.url !== img.url);
+      if (a?.images?.length > 0) {
+        a.images = a.images.filter((i) => i.url !== img.url);
+      }
+      if (img?.public_id === a.thumbnail.public_id) a["thumbnail"] = {};
+    } else {
+      a.allImages = a.allImages.filter((i) => i !== img);
+      a.newImages = a.newImages.filter((i) => i !== img);
+    }
+
+    setSelectedAd(a);
+  };
+
+  // of: handle images
+  const handleImageChange = (e) => {
+    const ad = { ...selectedAd };
+    if (ad?.isUpdatingImages === false) ad.isUpdatingImages = true;
+
+    const imgArrays = Array.from(e.target.files).map((file) =>
+      URL.createObjectURL(file)
+    );
+
+    ad.allImages = [...ad.allImages, ...imgArrays];
+    ad.newImages = [...ad.newImages, ...Array.from(e.target.files)];
+
+    setSelectedAd(ad);
+  };
+
   // of: handlechange
   const handleChange = (e) => {
     const name = e.target.name;
@@ -134,11 +170,55 @@ export default function AdsUpdateModal({
 
   const submitHandle = async (e) => {
     e.preventDefault();
+    const formData = new FormData();
+
+    formData.append("_id", selectedAd?._id);
+    formData.append("title", selectedAd.title);
+    formData.append("description", selectedAd.description);
+    formData.append("category", selectedAd.category);
+    formData.append("rent", selectedAd.rent);
+    formData.append("floor", selectedAd.floor);
+    formData.append("bedroom", selectedAd.bedroom);
+    formData.append("bathroom", selectedAd.bathroom);
+    formData.append("availableForm", selectedAd.availableForm);
+    formData.append("contact[phone]", selectedAd?.contact.phone);
+    formData.append("contact[whatsapp]", selectedAd?.contact.whatsapp || "");
+    formData.append(
+      "isUpdatingAvailableForm",
+      selectedAd.isUpdatingAvailableForm
+    );
+    if (Object.keys(selectedAd.thumbnail).length > 0) {
+      formData.append("thumbnail[url]", selectedAd.thumbnail?.url);
+      formData.append("thumbnail[public_id]", selectedAd.thumbnail?.public_id);
+    }
+
+    if (selectedAd.images?.length > 0) {
+      selectedAd.images.forEach((img, index) => {
+        // Append each property of the image object
+        formData.append(`images[${index}][url]`, img.url);
+        formData.append(`images[${index}][public_id]`, img.public_id);
+      });
+    }
+
+    formData.append("isUpdatingImages", selectedAd.isUpdatingImages);
+
+    if (selectedAd.deletedImages.length > 0) {
+      console.log(selectedAd.deletedImages);
+      selectedAd.deletedImages.forEach((img) => {
+        formData.append("deletedImages", img);
+      });
+    }
+    // Append new images as files
+    if (selectedAd.newImages.length > 0) {
+      selectedAd.newImages.forEach((imageFile) => {
+        formData.append("newImages", imageFile);
+      });
+    }
 
     setLoading(true);
 
     try {
-      const res = await updateAd(selectedAd).unwrap();
+      const res = await updateAd(formData).unwrap();
       if (res?._id) {
         setLoading(false);
         setIsShowing(false);
@@ -210,6 +290,14 @@ export default function AdsUpdateModal({
                     onSubmit={submitHandle}
                     className="w-full mx-auto bg-white p-6 rounded-md shadow-md"
                   >
+                    {/* upade images */}
+                    <ImageUploadField
+                      onChangeHandle={handleImageChange}
+                      selectedImages={selectedAd?.allImages}
+                      handleSelectedImage={handleSelectedImages}
+                      fieldName="newImages"
+                    />
+
                     {/* Title */}
                     <div className="mb-4">
                       <label
@@ -420,13 +508,17 @@ export default function AdsUpdateModal({
                       </div>
                     </div>
 
-                    {/* Post Button */}
+                    {/* update Button */}
                     <div className="mb-4">
                       <button
                         type="submit"
-                        className="w-full bg-slate-600 hover:bg-slate-700 text-white p-2 rounded-md"
+                        className="w-full flex justify-center bg-slate-600 hover:bg-slate-700 text-white p-2 rounded-md"
                       >
-                        {loading ? "Updating..." : "Update"}
+                        {loading ? (
+                          <SmallLoadingAnimation fillColor="fill-white" />
+                        ) : (
+                          "Update"
+                        )}
                       </button>
                     </div>
                   </form>

@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import ReactDOM from "react-dom";
 import { useDeleteAdMutation } from "../../../feature/api/apiSlice";
 import toast from "react-hot-toast";
+import SmallLoadingAnimation from "../../SmallLoadingAnimation";
 
 export default function AdDeleteConfirmationModal({
   showDeleteModal,
@@ -150,7 +151,16 @@ export default function AdDeleteConfirmationModal({
                     onClick={handleDelete}
                     className="inline-flex items-center justify-center flex-1 h-10 gap-2 px-5 text-sm font-medium tracking-wide text-white transition duration-300 rounded whitespace-nowrap bg-[rgb(72,92,122)] hover:bg-[rgb(60,79,105)]"
                   >
-                    <span>{loading ? "Deleting..." : "Yes, I'm sure"}</span>
+                    <span>
+                      {loading ? (
+                        <span className="flex justify-center">
+                          Deleting{" "}
+                          <SmallLoadingAnimation fillColor="fill-white" />
+                        </span>
+                      ) : (
+                        "Yes, I'm sure"
+                      )}
+                    </span>
                   </button>
                   <button
                     onClick={() => setShowDeleteModal(false)}

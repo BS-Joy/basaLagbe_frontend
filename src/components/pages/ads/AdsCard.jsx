@@ -5,7 +5,7 @@ import { PiBathtub } from "react-icons/pi";
 import { Link } from "react-router-dom";
 
 const defaultImageUrl =
-  "https://images.unsplash.com/photo-1515263487990-61b07816b324?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+  "https://res.cloudinary.com/di1qocbyt/image/upload/v1727499375/basaLagbe/d7ofx4ej9pxio7xifipd.webp";
 
 export default function AdsCard({ ad }) {
   return (
@@ -15,7 +15,7 @@ export default function AdsCard({ ad }) {
         {/*  <!-- Image --> */}
         <figure className="flex-1 p-2">
           <img
-            src={ad?.images ? ad?.images[0]?.url : defaultImageUrl}
+            src={ad?.thumbnail ? ad?.thumbnail?.url : defaultImageUrl}
             alt="card image"
             className="object-fill min-h-full aspect-auto rounded border"
           />

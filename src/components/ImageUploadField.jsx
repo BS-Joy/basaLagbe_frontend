@@ -4,6 +4,7 @@ const ImageUploadField = ({
   onChangeHandle,
   handleSelectedImage,
   selectedImages,
+  fieldName,
 }) => {
   return (
     <>
@@ -12,9 +13,9 @@ const ImageUploadField = ({
           Upload Images
         </p>
         <input
-          required
+          required={selectedImages?.length === 0}
           id="id-dropzone01"
-          name="images"
+          name={fieldName}
           type="file"
           className="absolute top-10 w-full h-full opacity-0"
           multiple
@@ -46,23 +47,25 @@ const ImageUploadField = ({
           <span className="text-gray-500"> click to upload</span>
         </label>
       </div>
-      <div className="flex gap-4 my-6">
+      <div className="flex gap-4 my-6 overflow-auto h-full py-3">
         {selectedImages &&
-          selectedImages.map((img, index) => (
-            <div key={index} className="relative">
-              <img
-                className="w-28 h-28 border rounded z-30"
-                src={img}
-                alt="selected_images"
-              />
-              <span
-                onClick={() => handleSelectedImage(img)}
-                className="text-xl absolute -top-3 -right-4 rounded-full cursor-pointer"
-              >
-                <IoCloseCircleSharp />
-              </span>
-            </div>
-          ))}
+          selectedImages.map((img, index) => {
+            return (
+              <div key={index} className="relative flex-shrink-0">
+                <img
+                  className="w-28 h-28 border rounded z-30"
+                  src={img?.url ? img?.url : img}
+                  alt="selected_images"
+                />
+                <span
+                  onClick={() => handleSelectedImage(img)}
+                  className="text-xl absolute -top-3 -right-4 rounded-full cursor-pointer"
+                >
+                  <IoCloseCircleSharp />
+                </span>
+              </div>
+            );
+          })}
       </div>
     </>
   );

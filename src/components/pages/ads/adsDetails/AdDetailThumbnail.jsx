@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
+import LoadingAnimation from "../../../LoadingAnimation";
 
 const defaultImageUrl =
-  "https://images.unsplash.com/photo-1515263487990-61b07816b324?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+  "https://res.cloudinary.com/di1qocbyt/image/upload/v1727499375/basaLagbe/d7ofx4ej9pxio7xifipd.webp";
 
 const AdDetailThumbnail = ({ adThumbnail, adImages }) => {
   const [thumbnail, setThumbnail] = useState(
     adThumbnail ? adThumbnail?.url : ""
   );
+  const [loading, setLoading] = useState(true);
 
   const handleThumbnail = (img) => {
     setThumbnail(img);
@@ -18,20 +20,24 @@ const AdDetailThumbnail = ({ adThumbnail, adImages }) => {
       } justify-between`}
     >
       {/* thumbnail */}
-      <figure className="w-full  flex justify-center">
+      <figure className="w-full flex justify-center">
+        {loading && <LoadingAnimation />}
         <img
           src={thumbnail || adImages[0]?.url || defaultImageUrl}
           alt="card image"
-          className="object-contain max-w-[700px] aspect-video rounded border"
+          className="object-fill lg:max-w-[700px] lg:max-h-[468px] rounded border"
+          onLoad={() => setLoading(false)}
+          onError={() => setLoading(false)}
         />
       </figure>
 
       {/* images */}
-      {1 && (
-        <div className="flex justify-center gap-2 overflow-auto scroll-smooth">
+      {adImages?.length > 0 && (
+        <div className="flex justify-start sm:justify-center gap-2 overflow-x-auto scroll-smooth">
+          {loading && <LoadingAnimation />}
           <figure
             onClick={() => handleThumbnail(adThumbnail?.url)}
-            className={`max-w-72 mx-h-96 cursor-pointer ${
+            className={`w-28 h-28 lg:w-36 lg:h-36 cursor-pointer flex-shrink-0 ${
               thumbnail === adThumbnail?.url &&
               "border-b-4 border-b-orange-500 rounded"
             }`}
@@ -39,24 +45,31 @@ const AdDetailThumbnail = ({ adThumbnail, adImages }) => {
             <img
               src={adThumbnail?.url}
               alt="card image"
-              className="object-fill rounded border"
+              className="object-cover w-full h-full rounded border"
+              onLoad={() => setLoading(false)}
+              onError={() => setLoading(false)}
             />
           </figure>
           {adImages?.map((img, index) => (
-            <figure
-              onClick={() => handleThumbnail(img?.url)}
-              key={index}
-              className={`max-w-72 mx-h-96 cursor-pointer border ${
-                thumbnail === img?.url &&
-                "border-b-4 border-b-orange-500 rounded"
-              }`}
-            >
-              <img
-                src={img?.url}
-                alt="card image"
-                className="object-fill w-full h-full rounded"
-              />
-            </figure>
+            <React.Fragment key={index}>
+              {loading && <LoadingAnimation />}
+              <figure
+                onClick={() => handleThumbnail(img?.url)}
+                key={index}
+                className={`w-28 h-28 lg:w-36 lg:h-36 cursor-pointer border flex-shrink-0 ${
+                  thumbnail === img?.url &&
+                  "border-b-4 border-b-orange-500 rounded"
+                }`}
+              >
+                <img
+                  src={img?.url}
+                  alt="card image"
+                  className="object-cover w-full h-full rounded"
+                  onLoad={() => setLoading(false)}
+                  onError={() => setLoading(false)}
+                />
+              </figure>
+            </React.Fragment>
           ))}
         </div>
       )}

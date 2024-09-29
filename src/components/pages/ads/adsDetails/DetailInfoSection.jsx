@@ -7,9 +7,12 @@ import { BsInfoSquare } from "react-icons/bs";
 import { MdOutlinePhoneIphone } from "react-icons/md";
 import UseGetBookmarkStatus from "../../../../hooks/useGetBookmarkStatus";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import SmallLoadingAnimation from "../../../SmallLoadingAnimation";
 
 const DetailInfoSection = ({ ad, user }) => {
   const isBookmarked = UseGetBookmarkStatus(ad, user);
+  const [bookmarkLoading, setBookmarkLoading] = useState(false);
 
   return (
     <header className="flex flex-col pb-6 pt-3 gap-3 shadow-md shadow-slate-200">
@@ -21,12 +24,22 @@ const DetailInfoSection = ({ ad, user }) => {
             Detail Informations
           </span>
         </div>
-        {isBookmarked ? (
-          <button className="bg-slate-200 text-slate-700 px-3 py-2 rounded hover:cursor-text hidden md:block">
-            Ad is already bookmarked
-          </button>
+        {bookmarkLoading ? (
+          <SmallLoadingAnimation fillColor="fill-[#33445B]" />
         ) : (
-          <BookmarkButton user={user} adId={ad?._id} />
+          <>
+            {isBookmarked ? (
+              <button className="bg-slate-200 text-slate-700 px-3 py-2 rounded hover:cursor-text hidden md:block">
+                Ad is already bookmarked
+              </button>
+            ) : (
+              <BookmarkButton
+                user={user}
+                adId={ad?._id}
+                setLoading={setBookmarkLoading}
+              />
+            )}
+          </>
         )}
       </div>
       <hr />

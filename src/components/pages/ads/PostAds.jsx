@@ -74,9 +74,10 @@ const PostAds = () => {
 
   // of: handle image upload
   const handleImages = (e) => {
-    const filesArray = Array.from(e.target.files).map((file) =>
-      URL.createObjectURL(file)
-    );
+    const filesArray = Array.from(e.target.files).map((file) => {
+      const url = URL.createObjectURL(file);
+      return url;
+    });
     setImages(filesArray);
     dispatch({ type: "addImages", payload: e.target.files });
   };
@@ -473,6 +474,7 @@ const PostAds = () => {
           onChangeHandle={handleImages}
           handleSelectedImage={handleSelectedImage}
           selectedImages={images}
+          fieldName="images"
         />
 
         {/* Post Button */}
