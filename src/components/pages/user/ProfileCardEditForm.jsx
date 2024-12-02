@@ -10,9 +10,7 @@ import { MdEdit } from "react-icons/md";
 import { FaCircleUser } from "react-icons/fa6";
 
 const ProfileCardEditForm = ({ user, setEditMode }) => {
-  const profilePictureUrl = user?.profilePicture
-    ? `${import.meta.env.VITE_PROFILE_PICTURE_BASE_URL}/${user?.profilePicture}`
-    : "";
+  const profilePictureUrl = user?.profilePicture?.url || "";
 
   const [userData, setUserData] = useState({
     username: user?.username || "",

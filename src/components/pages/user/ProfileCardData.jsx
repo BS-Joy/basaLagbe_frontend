@@ -13,7 +13,7 @@ const ProfileCardData = ({ user, setEditMode }) => {
         {user?.profilePicture ? (
           <div className="w-28 h-28 flex justify-center items-center rounded-full overflow-hidden">
             <img
-              src={profilePictureUrl}
+              src={user?.profilePicture?.url}
               alt={user?.username}
               className="w-full h-full object-cover object-center"
             />
