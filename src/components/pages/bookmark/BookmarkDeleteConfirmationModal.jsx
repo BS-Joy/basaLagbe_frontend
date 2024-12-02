@@ -148,13 +148,13 @@ export default function BookmarkDeleteConfirmationModal({
                     />
                   </svg>
                   <h3 className="flex-1 text-xl font-medium text-slate-700">
-                    Delete File?
+                    Are you sure to remove the ad from bookmark?
                   </h3>
                 </header>
                 {/*        <!-- Modal body --> */}
-                <div id="content-5a" className="flex-1 overflow-auto">
-                  <p>After deleting the ad, recovery will not be possible</p>
-                </div>
+                {/* <div id="content-5a" className="flex-1 overflow-auto">
+                  <p>After removing the ad, </p>
+                </div> */}
                 {/*        <!-- Modal actions --> */}
                 <div className="flex justify-start gap-2">
                   <button
